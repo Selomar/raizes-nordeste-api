@@ -164,11 +164,9 @@ As ferramentas abaixo podem facilitar o desenvolvimento e a administração do p
 Primeiramente, clone o repositório do projeto:
 
 ```bash
-git clone URL_DO_REPOSITORIO
+git clone https://github.com/Selomar/raizes-nordeste-api.git
 cd raizes-nordeste-api
 ```
-
-Substitua `URL_DO_REPOSITORIO` pelo endereço real do repositório no GitHub.
 
 ### 6.2. Criar o ambiente virtual
 
