@@ -1,4 +1,4 @@
-<mxfile host="app.diagrams.net" pages="3">
+<mxfile host="app.diagrams.net" pages="4">
   <diagram name="Diagrama Entidade-Relacionamento" id="u8pyGgcOReqMKOJHGGpC">
     <mxGraphModel grid="1" page="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
       <root>
@@ -253,7 +253,7 @@
     </mxGraphModel>
   </diagram>
   <diagram id="WvxauT33RWxuErqV_88n" name="Diagrama de casos de usos">
-    <mxGraphModel dx="976" dy="542" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+    <mxGraphModel grid="1" page="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -312,6 +312,241 @@
         </mxCell>
         <mxCell id="VK5lqR_ePjma3fhDbTOv-34" parent="1" style="ellipse;whiteSpace=wrap;html=1;shapeInside=1;" value="Atualizar status do pedido" vertex="1">
           <mxGeometry height="80" width="120" x="570" y="300" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram id="TjgXyskWUXiTMFImCTkr" name="Diagrama de sequência">
+    <mxGraphModel dx="1999" dy="650" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="3RLr4wZCRdEfY5ui6LGK-66" parent="1" style="html=1;shape=mxgraph.sysml.package;labelX=191.83;html=1;overflow=fill;strokeWidth=1;recursiveResize=0;" value="&lt;p style=&quot;margin:0px;margin-top:4px;margin-left:10px;text-align:left;&quot;&gt;&lt;b&gt;Fluxo de pedido e pagamento&lt;/b&gt;&lt;/p&gt;" vertex="1">
+          <mxGeometry height="600" width="839" x="-230" y="780" as="geometry" />
+        </mxCell>
+        <mxCell id="3RLr4wZCRdEfY5ui6LGK-70" parent="3RLr4wZCRdEfY5ui6LGK-66" style="strokeColor=inherit;fillColor=inherit;gradientColor=inherit;html=1;shape=mxgraph.sysml.package;labelX=109.33;fontStyle=1;align=left;verticalAlign=top;spacingLeft=5;spacingTop=-3;" value="" vertex="1">
+          <mxGeometry height="230" width="782" x="30" y="350" as="geometry" />
+        </mxCell>
+        <mxCell id="3RLr4wZCRdEfY5ui6LGK-74" edge="1" parent="3RLr4wZCRdEfY5ui6LGK-66" style="strokeColor=inherit;fillColor=inherit;gradientColor=inherit;endArrow=none;html=1;edgeStyle=none;dashed=1;rounded=0;defaultLabelBackgroundColor=page;labelPadding=0 4;entryX=0;entryY=0.5;entryDx=0;entryDy=0;entryPerimeter=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;exitPerimeter=0;" value="">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="812" y="467" as="sourcePoint" />
+            <mxPoint x="29.999999999999773" y="467" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="3RLr4wZCRdEfY5ui6LGK-1" parent="3RLr4wZCRdEfY5ui6LGK-66" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=1;dropTarget=0;collapsible=0;recursiveResize=0;outlineConnect=0;portConstraint=eastwest;newEdgeStyle={&quot;edgeStyle&quot;:&quot;sequenceEdgeStyle&quot;,&quot;libavoidRouting&quot;:0,&quot;curved&quot;:0,&quot;rounded&quot;:0};" value="Operador" vertex="1">
+          <mxGeometry height="559.5" width="100" x="142" y="30.5" as="geometry" />
+        </mxCell>
+        <mxCell id="3RLr4wZCRdEfY5ui6LGK-2" parent="3RLr4wZCRdEfY5ui6LGK-66" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=1;dropTarget=0;collapsible=0;recursiveResize=0;outlineConnect=0;portConstraint=eastwest;newEdgeStyle={&quot;edgeStyle&quot;:&quot;sequenceEdgeStyle&quot;,&quot;libavoidRouting&quot;:0,&quot;curved&quot;:0,&quot;rounded&quot;:0};" value="API FastAPI" vertex="1">
+          <mxGeometry height="559.5" width="100" x="323" y="30.5" as="geometry" />
+        </mxCell>
+        <mxCell id="3RLr4wZCRdEfY5ui6LGK-4" parent="3RLr4wZCRdEfY5ui6LGK-66" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=1;dropTarget=0;collapsible=0;recursiveResize=0;outlineConnect=0;portConstraint=eastwest;newEdgeStyle={&quot;edgeStyle&quot;:&quot;sequenceEdgeStyle&quot;,&quot;libavoidRouting&quot;:0,&quot;curved&quot;:0,&quot;rounded&quot;:0};" value="Módulo de auditoria" vertex="1">
+          <mxGeometry height="559.5" width="100" x="683" y="30.5" as="geometry" />
+        </mxCell>
+        <mxCell id="3RLr4wZCRdEfY5ui6LGK-5" parent="3RLr4wZCRdEfY5ui6LGK-66" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=1;dropTarget=0;collapsible=0;recursiveResize=0;outlineConnect=0;portConstraint=eastwest;newEdgeStyle={&quot;edgeStyle&quot;:&quot;sequenceEdgeStyle&quot;,&quot;libavoidRouting&quot;:0,&quot;curved&quot;:0,&quot;rounded&quot;:0};" value="PostgreSQL" vertex="1">
+          <mxGeometry height="559.5" width="100" x="503" y="30.5" as="geometry" />
+        </mxCell>
+        <mxCell id="3RLr4wZCRdEfY5ui6LGK-7" edge="1" parent="3RLr4wZCRdEfY5ui6LGK-66" source="3RLr4wZCRdEfY5ui6LGK-1" style="html=1;verticalAlign=bottom;endArrow=block;edgeStyle=sequenceEdgeStyle;libavoidRouting=0;curved=0;rounded=0;defaultLabelBackgroundColor=page;labelPadding=0 4;align=center;" target="3RLr4wZCRdEfY5ui6LGK-2" value="POST /pedidos/ (dados do pedido + token JWT)">
+          <mxGeometry relative="1" width="80" as="geometry">
+            <mxPoint x="-1" as="offset" />
+            <Array as="points">
+              <mxPoint x="282" y="102.5" />
+            </Array>
+            <mxPoint x="222" y="102.5" as="sourcePoint" />
+            <mxPoint x="302" y="102.5" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="3RLr4wZCRdEfY5ui6LGK-8" edge="1" parent="3RLr4wZCRdEfY5ui6LGK-66" source="3RLr4wZCRdEfY5ui6LGK-2" style="html=1;verticalAlign=bottom;endArrow=block;edgeStyle=sequenceEdgeStyle;libavoidRouting=0;curved=0;rounded=0;defaultLabelBackgroundColor=page;labelPadding=0 4;" target="3RLr4wZCRdEfY5ui6LGK-5" value="Validar cliente, unidade e produtos">
+          <mxGeometry relative="1" width="80" x="0.0056" as="geometry">
+            <mxPoint x="-1" as="offset" />
+            <Array as="points">
+              <mxPoint x="462.50000000000045" y="123.5" />
+            </Array>
+            <mxPoint x="342" y="123.5" as="sourcePoint" />
+            <mxPoint x="422" y="123.5" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="3RLr4wZCRdEfY5ui6LGK-9" edge="1" parent="3RLr4wZCRdEfY5ui6LGK-66" source="3RLr4wZCRdEfY5ui6LGK-5" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;endSize=8;edgeStyle=sequenceEdgeStyle;libavoidRouting=0;curved=0;rounded=0;defaultLabelBackgroundColor=page;labelPadding=0 4;" target="3RLr4wZCRdEfY5ui6LGK-2" value="Dados encontrados e validações concluídas">
+          <mxGeometry relative="1" x="-0.0083" as="geometry">
+            <mxPoint as="offset" />
+            <Array as="points">
+              <mxPoint x="462.50000000000045" y="146.49999999999977" />
+            </Array>
+            <mxPoint x="512" y="146.5" as="sourcePoint" />
+            <mxPoint x="432" y="146.5" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="3RLr4wZCRdEfY5ui6LGK-10" edge="1" parent="3RLr4wZCRdEfY5ui6LGK-66" source="3RLr4wZCRdEfY5ui6LGK-2" style="html=1;verticalAlign=bottom;endArrow=block;edgeStyle=sequenceEdgeStyle;libavoidRouting=0;curved=0;rounded=0;defaultLabelBackgroundColor=page;labelPadding=0 4;" target="3RLr4wZCRdEfY5ui6LGK-5" value="Salvar pedido e itens do pedido">
+          <mxGeometry relative="1" width="80" x="-0.0056" as="geometry">
+            <mxPoint x="1" as="offset" />
+            <Array as="points">
+              <mxPoint x="462.50000000000045" y="170.5" />
+            </Array>
+            <mxPoint x="342" y="170.5" as="sourcePoint" />
+            <mxPoint x="422" y="170.5" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="3RLr4wZCRdEfY5ui6LGK-11" edge="1" parent="3RLr4wZCRdEfY5ui6LGK-66" source="3RLr4wZCRdEfY5ui6LGK-2" style="html=1;verticalAlign=bottom;endArrow=block;edgeStyle=sequenceEdgeStyle;libavoidRouting=0;curved=0;rounded=0;defaultLabelBackgroundColor=page;labelPadding=0 4;" target="3RLr4wZCRdEfY5ui6LGK-4" value="Registrar criação do pedido">
+          <mxGeometry relative="1" width="80" x="-0.0583" as="geometry">
+            <mxPoint as="offset" />
+            <Array as="points">
+              <mxPoint x="552.5000000000005" y="193.5" />
+            </Array>
+            <mxPoint x="342" y="193.5" as="sourcePoint" />
+            <mxPoint x="422" y="193.5" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="3RLr4wZCRdEfY5ui6LGK-12" edge="1" parent="3RLr4wZCRdEfY5ui6LGK-66" source="3RLr4wZCRdEfY5ui6LGK-4" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;endSize=8;edgeStyle=sequenceEdgeStyle;libavoidRouting=0;curved=0;rounded=0;defaultLabelBackgroundColor=page;labelPadding=0 4;" target="3RLr4wZCRdEfY5ui6LGK-2" value="Registro de auditoria concluído">
+          <mxGeometry relative="1" x="-0.0042" as="geometry">
+            <mxPoint as="offset" />
+            <Array as="points">
+              <mxPoint x="552.5000000000005" y="218.5" />
+            </Array>
+            <mxPoint x="632" y="218.5" as="sourcePoint" />
+            <mxPoint x="552" y="218.5" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="3RLr4wZCRdEfY5ui6LGK-13" edge="1" parent="3RLr4wZCRdEfY5ui6LGK-66" source="3RLr4wZCRdEfY5ui6LGK-2" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;endSize=8;edgeStyle=sequenceEdgeStyle;libavoidRouting=0;curved=0;rounded=0;defaultLabelBackgroundColor=page;labelPadding=0 4;" target="3RLr4wZCRdEfY5ui6LGK-1" value="Pedido criado com sucesso (HTTP201)">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="1" as="offset" />
+            <Array as="points">
+              <mxPoint x="282" y="246.49999999999977" />
+            </Array>
+            <mxPoint x="402" y="246.5" as="sourcePoint" />
+            <mxPoint x="322" y="246.5" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="3RLr4wZCRdEfY5ui6LGK-14" edge="1" parent="3RLr4wZCRdEfY5ui6LGK-66" source="3RLr4wZCRdEfY5ui6LGK-1" style="html=1;verticalAlign=bottom;endArrow=block;edgeStyle=sequenceEdgeStyle;libavoidRouting=0;curved=0;rounded=0;defaultLabelBackgroundColor=page;labelPadding=0 4;" target="3RLr4wZCRdEfY5ui6LGK-2" value="POST /pedidos/{pedido_id}/pagamento (resultado do mock)">
+          <mxGeometry relative="1" width="80" x="-0.105" as="geometry">
+            <Array as="points">
+              <mxPoint x="282" y="296.4999999999998" />
+            </Array>
+            <mxPoint x="232" y="296.5" as="sourcePoint" />
+            <mxPoint x="312" y="296.5" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="3RLr4wZCRdEfY5ui6LGK-15" edge="1" parent="3RLr4wZCRdEfY5ui6LGK-66" source="3RLr4wZCRdEfY5ui6LGK-2" style="html=1;verticalAlign=bottom;endArrow=block;edgeStyle=sequenceEdgeStyle;libavoidRouting=0;curved=0;rounded=0;defaultLabelBackgroundColor=page;labelPadding=0 4;" target="3RLr4wZCRdEfY5ui6LGK-5" value="Consultar pedido e verificar status PENDENTE">
+          <mxGeometry relative="1" width="80" x="0.0056" as="geometry">
+            <mxPoint as="offset" />
+            <Array as="points">
+              <mxPoint x="462.50000000000045" y="319.5" />
+            </Array>
+            <mxPoint x="402" y="319.5" as="sourcePoint" />
+            <mxPoint x="482" y="319.5" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="3RLr4wZCRdEfY5ui6LGK-16" edge="1" parent="3RLr4wZCRdEfY5ui6LGK-66" source="3RLr4wZCRdEfY5ui6LGK-5" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;endSize=8;edgeStyle=sequenceEdgeStyle;libavoidRouting=0;curved=0;rounded=0;defaultLabelBackgroundColor=page;labelPadding=0 4;" target="3RLr4wZCRdEfY5ui6LGK-2" value="Pedido encontrado e status validado">
+          <mxGeometry relative="1" x="-0.0111" as="geometry">
+            <Array as="points">
+              <mxPoint x="462.50000000000045" y="341.5000000000002" />
+            </Array>
+            <mxPoint x="503" y="341.5" as="sourcePoint" />
+            <mxPoint x="423" y="341.5" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="3RLr4wZCRdEfY5ui6LGK-17" edge="1" parent="3RLr4wZCRdEfY5ui6LGK-66" source="3RLr4wZCRdEfY5ui6LGK-2" style="html=1;verticalAlign=bottom;endArrow=block;edgeStyle=sequenceEdgeStyle;libavoidRouting=0;curved=0;rounded=0;defaultLabelBackgroundColor=page;labelPadding=0 4;" target="3RLr4wZCRdEfY5ui6LGK-5" value="Salvar pagamento APROVADO e atualizar pedido para PAGO">
+          <mxGeometry relative="1" width="80" x="-0.0056" as="geometry">
+            <mxPoint x="1" as="offset" />
+            <Array as="points">
+              <mxPoint x="462.5" y="370.5" />
+            </Array>
+            <mxPoint x="392" y="370.5" as="sourcePoint" />
+            <mxPoint x="472" y="370.5" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="3RLr4wZCRdEfY5ui6LGK-18" edge="1" parent="3RLr4wZCRdEfY5ui6LGK-66" source="3RLr4wZCRdEfY5ui6LGK-2" style="html=1;verticalAlign=bottom;endArrow=block;edgeStyle=sequenceEdgeStyle;libavoidRouting=0;curved=0;rounded=0;defaultLabelBackgroundColor=page;labelPadding=0 4;" target="3RLr4wZCRdEfY5ui6LGK-4" value="Registrar processamento do pagamento">
+          <mxGeometry relative="1" width="80" x="-0.0028" as="geometry">
+            <mxPoint x="1" as="offset" />
+            <Array as="points">
+              <mxPoint x="552.5000000000005" y="409.5000000000002" />
+            </Array>
+            <mxPoint x="402" y="409.5" as="sourcePoint" />
+            <mxPoint x="482" y="409.5" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="3RLr4wZCRdEfY5ui6LGK-19" edge="1" parent="3RLr4wZCRdEfY5ui6LGK-66" source="3RLr4wZCRdEfY5ui6LGK-5" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;endSize=8;edgeStyle=sequenceEdgeStyle;libavoidRouting=0;curved=0;rounded=0;defaultLabelBackgroundColor=page;labelPadding=0 4;" target="3RLr4wZCRdEfY5ui6LGK-2" value="Pagamento e status do pedido atualizados">
+          <mxGeometry relative="1" x="0.0056" as="geometry">
+            <mxPoint as="offset" />
+            <Array as="points">
+              <mxPoint x="462.5" y="390.5" />
+            </Array>
+            <mxPoint x="492.5" y="390.5" as="sourcePoint" />
+            <mxPoint x="412.5" y="390.5" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="3RLr4wZCRdEfY5ui6LGK-20" edge="1" parent="3RLr4wZCRdEfY5ui6LGK-66" source="3RLr4wZCRdEfY5ui6LGK-4" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;endSize=8;edgeStyle=sequenceEdgeStyle;libavoidRouting=0;curved=0;rounded=0;defaultLabelBackgroundColor=page;labelPadding=0 4;" target="3RLr4wZCRdEfY5ui6LGK-2" value="Registro de auditoria concluído">
+          <mxGeometry relative="1" x="0.0028" as="geometry">
+            <mxPoint as="offset" />
+            <Array as="points">
+              <mxPoint x="552.5000000000005" y="431.5" />
+            </Array>
+            <mxPoint x="556" y="431.5" as="sourcePoint" />
+            <mxPoint x="476" y="431.5" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="3RLr4wZCRdEfY5ui6LGK-21" edge="1" parent="3RLr4wZCRdEfY5ui6LGK-66" source="3RLr4wZCRdEfY5ui6LGK-2" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;endSize=8;edgeStyle=sequenceEdgeStyle;libavoidRouting=0;curved=0;rounded=0;defaultLabelBackgroundColor=page;labelPadding=0 4;" target="3RLr4wZCRdEfY5ui6LGK-1" value="Pagamento aprovado e pedido atualizado (HTTP 200)">
+          <mxGeometry relative="1" x="0.0055" as="geometry">
+            <Array as="points">
+              <mxPoint x="282" y="453.5" />
+            </Array>
+            <mxPoint x="322" y="453.5" as="sourcePoint" />
+            <mxPoint x="242" y="453.5" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="3RLr4wZCRdEfY5ui6LGK-93" parent="3RLr4wZCRdEfY5ui6LGK-66" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;" value="[aprovado = true]" vertex="1">
+          <mxGeometry height="30" width="100" x="31" y="345" as="geometry" />
+        </mxCell>
+        <mxCell id="3RLr4wZCRdEfY5ui6LGK-94" parent="3RLr4wZCRdEfY5ui6LGK-66" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;" value="[aprovado = false]" vertex="1">
+          <mxGeometry height="30" width="100" x="34" y="462" as="geometry" />
+        </mxCell>
+        <mxCell id="3RLr4wZCRdEfY5ui6LGK-95" edge="1" parent="3RLr4wZCRdEfY5ui6LGK-66" source="3RLr4wZCRdEfY5ui6LGK-2" style="html=1;verticalAlign=bottom;endArrow=block;edgeStyle=sequenceEdgeStyle;libavoidRouting=0;curved=0;rounded=0;defaultLabelBackgroundColor=page;labelPadding=0 4;" target="3RLr4wZCRdEfY5ui6LGK-5" value="Salvar pagamento RECUSADO e atualizar pedido para PAGAMENTO_RECUSADO">
+          <mxGeometry relative="1" width="80" x="0.0056" as="geometry">
+            <mxPoint as="offset" />
+            <Array as="points">
+              <mxPoint x="431.25000000000045" y="490" />
+            </Array>
+            <mxPoint x="410" y="490" as="sourcePoint" />
+            <mxPoint x="490" y="490" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="3RLr4wZCRdEfY5ui6LGK-96" edge="1" parent="3RLr4wZCRdEfY5ui6LGK-66" source="3RLr4wZCRdEfY5ui6LGK-2" style="html=1;verticalAlign=bottom;endArrow=block;edgeStyle=sequenceEdgeStyle;libavoidRouting=0;curved=0;rounded=0;defaultLabelBackgroundColor=page;labelPadding=0 4;" target="3RLr4wZCRdEfY5ui6LGK-4" value="Registrar pagamento recusado">
+          <mxGeometry relative="1" width="80" x="0.0028" as="geometry">
+            <mxPoint as="offset" />
+            <Array as="points">
+              <mxPoint x="552.5000000000005" y="528.0000000000005" />
+            </Array>
+            <mxPoint x="410" y="528" as="sourcePoint" />
+            <mxPoint x="490" y="528" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="3RLr4wZCRdEfY5ui6LGK-98" edge="1" parent="3RLr4wZCRdEfY5ui6LGK-66" source="3RLr4wZCRdEfY5ui6LGK-5" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;endSize=8;edgeStyle=sequenceEdgeStyle;libavoidRouting=0;curved=0;rounded=0;defaultLabelBackgroundColor=page;labelPadding=0 4;" target="3RLr4wZCRdEfY5ui6LGK-2" value="Pagamento RECUSADO e status atualizado">
+          <mxGeometry relative="1" x="0.0278" as="geometry">
+            <mxPoint as="offset" />
+            <Array as="points">
+              <mxPoint x="462.50000000000045" y="509.9999999999998" />
+            </Array>
+            <mxPoint x="520" y="510" as="sourcePoint" />
+            <mxPoint x="440" y="510" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="3RLr4wZCRdEfY5ui6LGK-99" edge="1" parent="3RLr4wZCRdEfY5ui6LGK-66" source="3RLr4wZCRdEfY5ui6LGK-4" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;endSize=8;edgeStyle=sequenceEdgeStyle;libavoidRouting=0;curved=0;rounded=0;defaultLabelBackgroundColor=page;labelPadding=0 4;" target="3RLr4wZCRdEfY5ui6LGK-2" value="Registro de auditoria concluído">
+          <mxGeometry relative="1" x="-0.0028" as="geometry">
+            <mxPoint as="offset" />
+            <Array as="points">
+              <mxPoint x="676.2500000000005" y="547.0000000000002" />
+            </Array>
+            <mxPoint x="700" y="547" as="sourcePoint" />
+            <mxPoint x="620" y="547" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="3RLr4wZCRdEfY5ui6LGK-100" edge="1" parent="3RLr4wZCRdEfY5ui6LGK-66" source="3RLr4wZCRdEfY5ui6LGK-2" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;endSize=8;edgeStyle=sequenceEdgeStyle;libavoidRouting=0;curved=0;rounded=0;defaultLabelBackgroundColor=page;labelPadding=0 4;" target="3RLr4wZCRdEfY5ui6LGK-1" value="Pagamento recusado e pedido atualizado (HTTP 200)">
+          <mxGeometry relative="1" x="-0.0055" as="geometry">
+            <mxPoint as="offset" />
+            <Array as="points">
+              <mxPoint x="282" y="568.0000000000002" />
+            </Array>
+            <mxPoint x="470" y="568" as="sourcePoint" />
+            <mxPoint x="390" y="568" as="targetPoint" />
+          </mxGeometry>
         </mxCell>
       </root>
     </mxGraphModel>
