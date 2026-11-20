@@ -1,6 +1,6 @@
-<mxfile host="app.diagrams.net">
-  <diagram name="Página-1" id="u8pyGgcOReqMKOJHGGpC">
-    <mxGraphModel dx="1172" dy="650" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+<mxfile host="app.diagrams.net" pages="2">
+  <diagram name="Diagrama Entidade-Relacionamento" id="u8pyGgcOReqMKOJHGGpC">
+    <mxGraphModel grid="1" page="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -167,6 +167,86 @@
         <mxCell id="5m7KAu0D4PgFeE_D5ath-44" connectable="0" parent="5m7KAu0D4PgFeE_D5ath-42" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];inheritText=1;defaultLabelBackgroundColor=page;labelPadding=0 4;" value="0..1" vertex="1">
           <mxGeometry relative="1" x="0.8431" as="geometry">
             <mxPoint x="20" as="offset" />
+          </mxGeometry>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram id="y-Tm2uGtUlPbdNAd-LtF" name="Diagrama de Arquitetura em Camadas">
+    <mxGraphModel dx="1406" dy="780" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="FHsvEZhC40u7nNT2EcaW-15" edge="1" parent="1" source="FHsvEZhC40u7nNT2EcaW-9" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;defaultLabelBackgroundColor=page;labelPadding=0 4;" target="FHsvEZhC40u7nNT2EcaW-13">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="FHsvEZhC40u7nNT2EcaW-17" connectable="0" parent="FHsvEZhC40u7nNT2EcaW-15" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];inheritText=1;defaultLabelBackgroundColor=page;labelPadding=0 4;" value="Consulta e gravações" vertex="1">
+          <mxGeometry relative="1" x="-0.0399" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="FHsvEZhC40u7nNT2EcaW-16" connectable="0" parent="1" style="group" value="" vertex="1">
+          <mxGeometry height="149" width="476" x="80" y="631" as="geometry" />
+        </mxCell>
+        <mxCell id="FHsvEZhC40u7nNT2EcaW-13" parent="FHsvEZhC40u7nNT2EcaW-16" style="html=1;whiteSpace=wrap;verticalAlign=top;" value="&lt;h5&gt;BANCO DE DADOS&lt;br&gt;PostgreSQL&lt;/h5&gt;" vertex="1">
+          <mxGeometry height="149" width="476" as="geometry" />
+        </mxCell>
+        <mxCell id="FHsvEZhC40u7nNT2EcaW-14" parent="FHsvEZhC40u7nNT2EcaW-16" style="html=1;whiteSpace=wrap;" value="raizes_nordeste&lt;br&gt;&lt;br&gt;Persistência dos dados&lt;br&gt;8 tabelas relacionais" vertex="1">
+          <mxGeometry height="70" width="458" x="10" y="69" as="geometry" />
+        </mxCell>
+        <mxCell id="FHsvEZhC40u7nNT2EcaW-18" connectable="0" parent="1" style="group" value="" vertex="1">
+          <mxGeometry height="130" width="476" x="80" y="440" as="geometry" />
+        </mxCell>
+        <mxCell id="FHsvEZhC40u7nNT2EcaW-9" parent="FHsvEZhC40u7nNT2EcaW-18" style="html=1;whiteSpace=wrap;verticalAlign=top;" value="&lt;h5&gt;CAMADA DE INFRAESTRUTURA&lt;/h5&gt;" vertex="1">
+          <mxGeometry height="130" width="476" as="geometry" />
+        </mxCell>
+        <mxCell id="FHsvEZhC40u7nNT2EcaW-10" parent="FHsvEZhC40u7nNT2EcaW-18" style="html=1;whiteSpace=wrap;" value="database.py&lt;div&gt;models.py&lt;/div&gt;&lt;div&gt;SQLAlchemy&lt;/div&gt;" vertex="1">
+          <mxGeometry height="50" width="138" x="10" y="70" as="geometry" />
+        </mxCell>
+        <mxCell id="FHsvEZhC40u7nNT2EcaW-11" parent="FHsvEZhC40u7nNT2EcaW-18" style="html=1;whiteSpace=wrap;" value="security.py&lt;div&gt;Hash Argon2&lt;/div&gt;&lt;div&gt;JWT&lt;/div&gt;" vertex="1">
+          <mxGeometry height="50" width="138" x="170" y="70" as="geometry" />
+        </mxCell>
+        <mxCell id="FHsvEZhC40u7nNT2EcaW-12" parent="FHsvEZhC40u7nNT2EcaW-18" style="html=1;whiteSpace=wrap;" value="audit.py&lt;div&gt;Registros de eventos&lt;/div&gt;" vertex="1">
+          <mxGeometry height="50" width="138" x="330" y="70" as="geometry" />
+        </mxCell>
+        <mxCell id="FHsvEZhC40u7nNT2EcaW-19" connectable="0" parent="1" style="group" value="" vertex="1">
+          <mxGeometry height="140" width="476" x="80" y="240" as="geometry" />
+        </mxCell>
+        <mxCell id="FHsvEZhC40u7nNT2EcaW-6" parent="FHsvEZhC40u7nNT2EcaW-19" style="html=1;whiteSpace=wrap;verticalAlign=top;" value="&lt;h5&gt;CAMADA DE SCHEMAS&lt;br&gt;Pydantic&lt;/h5&gt;" vertex="1">
+          <mxGeometry height="140" width="476" as="geometry" />
+        </mxCell>
+        <mxCell id="FHsvEZhC40u7nNT2EcaW-7" parent="FHsvEZhC40u7nNT2EcaW-19" style="html=1;whiteSpace=wrap;" value="LoginRequest&lt;div&gt;TokenResposta&lt;/div&gt;" vertex="1">
+          <mxGeometry height="50" width="207" x="10" y="80" as="geometry" />
+        </mxCell>
+        <mxCell id="FHsvEZhC40u7nNT2EcaW-8" parent="FHsvEZhC40u7nNT2EcaW-19" style="html=1;whiteSpace=wrap;" value="PedidoCriacao&lt;br&gt;PedidoResposta&lt;br&gt;PagamentoCriacao" vertex="1">
+          <mxGeometry height="60" width="207" x="261" y="70" as="geometry" />
+        </mxCell>
+        <mxCell id="FHsvEZhC40u7nNT2EcaW-20" connectable="0" parent="1" style="group" value="" vertex="1">
+          <mxGeometry height="160" width="476" x="80" y="10" as="geometry" />
+        </mxCell>
+        <mxCell id="FHsvEZhC40u7nNT2EcaW-2" parent="FHsvEZhC40u7nNT2EcaW-20" style="html=1;whiteSpace=wrap;verticalAlign=top;fontColor=default;textShadow=0;labelBackgroundColor=none;" value="&lt;h5&gt;CAMADA DE API&lt;br&gt;FastAPI&lt;/h5&gt;" vertex="1">
+          <mxGeometry height="160" width="476" as="geometry" />
+        </mxCell>
+        <mxCell id="FHsvEZhC40u7nNT2EcaW-4" parent="FHsvEZhC40u7nNT2EcaW-20" style="html=1;whiteSpace=wrap;" value="Autenticação&lt;div&gt;/auth/login&lt;/div&gt;&lt;div&gt;/auth/me&lt;/div&gt;" vertex="1">
+          <mxGeometry height="70" width="207" x="10" y="80" as="geometry" />
+        </mxCell>
+        <mxCell id="FHsvEZhC40u7nNT2EcaW-5" parent="FHsvEZhC40u7nNT2EcaW-20" style="html=1;whiteSpace=wrap;" value="Pedidos&lt;div&gt;/pedidos/&lt;/div&gt;&lt;div&gt;/pedidos/{pedido_id}/pagamento&lt;/div&gt;" vertex="1">
+          <mxGeometry height="70" width="207" x="261" y="80" as="geometry" />
+        </mxCell>
+        <mxCell id="FHsvEZhC40u7nNT2EcaW-22" edge="1" parent="1" source="FHsvEZhC40u7nNT2EcaW-6" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;defaultLabelBackgroundColor=page;labelPadding=0 4;" target="FHsvEZhC40u7nNT2EcaW-9">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="FHsvEZhC40u7nNT2EcaW-23" connectable="0" parent="FHsvEZhC40u7nNT2EcaW-22" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];inheritText=1;defaultLabelBackgroundColor=page;labelPadding=0 4;" value="Dados validados" vertex="1">
+          <mxGeometry relative="1" x="-0.0487" y="1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="FHsvEZhC40u7nNT2EcaW-24" edge="1" parent="1" source="FHsvEZhC40u7nNT2EcaW-2" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;defaultLabelBackgroundColor=page;labelPadding=0 4;startArrow=classic;startFill=1;" target="FHsvEZhC40u7nNT2EcaW-6">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="FHsvEZhC40u7nNT2EcaW-25" connectable="0" parent="FHsvEZhC40u7nNT2EcaW-24" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];inheritText=1;defaultLabelBackgroundColor=page;labelPadding=0 4;" value="Validação de entrada e resposta" vertex="1">
+          <mxGeometry relative="1" x="-0.0857" y="-1" as="geometry">
+            <mxPoint as="offset" />
           </mxGeometry>
         </mxCell>
       </root>
