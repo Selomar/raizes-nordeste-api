@@ -31,7 +31,7 @@
             "header": [],
             "body": {
               "mode": "raw",
-              "raw": "{\r\n    \"email\": \"selomarjun@gmail.com\",\r\n    \"senha\": \"12079812\"\r\n}",
+              "raw": "{\r\n    \"email\": \"admin@teste.com\",\r\n    \"senha\": \"123456789\"\r\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -128,6 +128,44 @@
       "item": [
         {
           "name": "Criar pedido",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const resposta = pm.response.json();\r\n\r\npm.test(\"Pedido criado com sucesso\", function () {\r\n    pm.response.to.have.status(201);\r\n});\r\n\r\npm.test(\"Status inicial do pedido é PENDENTE\", function () {\r\n    pm.expect(resposta.status).to.eql(\"PENDENTE\");\r\n});\r\n\r\npm.test(\"Valor total calculado corretamente\", function () {\r\n    pm.expect(resposta.valor_total).to.eql(24);\r\n});\r\n\r\npm.environment.set(\"pedido_id\", resposta.id);"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"cliente_id\": 1,\r\n  \"unidade_id\": 1,\r\n  \"canal_pedido\": \"APP\",\r\n  \"itens\": [\r\n    {\r\n      \"produto_id\": 2,\r\n      \"quantidade\": 1\r\n    },\r\n    {\r\n      \"produto_id\": 4,\r\n      \"quantidade\": 2\r\n    }\r\n  ]\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/pedidos/",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "pedidos",
+                ""
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Criar pedido - Campo obrigatório ausente",
           "event": [
             {
               "listen": "test",
@@ -401,7 +439,7 @@
               "script": {
                 "type": "text/javascript",
                 "exec": [
-                  "const resposta = pm.response.json();\r\n\r\npm.test(\"Pagamento processado com sucesso\", function () {\r\n    pm.response.to.have.status(200);\r\n});\r\n\r\npm.test(\"Pagamento foi recusado\", function () {\r\n    pm.expect(resposta.status_pagamento).to.eql(\"RECUSADO\");\r\n});\r\n\r\npm.test(\"Pedido atualizado para PAGAMENTO_RECUSADO\", function () {\r\n    pm.expect(resposta.status_pedido).to.eql(\"PAGAMENTO_RECUSADO\");\r\n});\r\n\r\npm.test(\"Valor do pagamento correto\", function () {\r\n    pm.expect(resposta.valor).to.eql(16);\r\n});"
+                  "const resposta = pm.response.json();\r\n\r\npm.test(\"Pagamento processado com sucesso\", function () {\r\n    pm.response.to.have.status(200);\r\n});\r\n\r\npm.test(\"Pagamento foi recusado\", function () {\r\n    pm.expect(resposta.status_pagamento).to.eql(\"RECUSADO\");\r\n});\r\n\r\npm.test(\"Pedido atualizado para PAGAMENTO_RECUSADO\", function () {\r\n    pm.expect(resposta.status_pedido).to.eql(\"PAGAMENTO_RECUSADO\");\r\n});\r\n\r\npm.test(\"Valor do pagamento correto\", function () {\r\n    pm.expect(resposta.valor).to.eql(7);\r\n});"
                 ]
               }
             }
