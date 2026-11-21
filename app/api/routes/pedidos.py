@@ -38,13 +38,19 @@ def get_db():
 @router.get("/")
 def listar_pedidos(
         db: Annotated[Session, Depends(get_db)],
-        usuario: Annotated[Usuario, Depends(obter_usuario_atual)]
+        usuario: Annotated[Usuario, Depends(obter_usuario_atual)],
+        canal_pedido: str = None
 ):
     consulta = db.query(PedidoModel)
 
     if usuario.perfil == "OPERADOR":
         consulta = consulta.filter(
             PedidoModel.unidade_id == usuario.unidade_id
+        )
+
+    if canal_pedido is not None:
+        consulta = consulta.filter(
+            PedidoModel.canal_pedido == canal_pedido
         )
 
     pedidos = consulta.all()

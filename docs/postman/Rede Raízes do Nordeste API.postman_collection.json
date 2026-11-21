@@ -172,7 +172,7 @@
               "script": {
                 "type": "text/javascript",
                 "exec": [
-                  "const resposta = pm.response.json();\r\n\r\npm.test(\"Pedido criado com sucesso\", function () {\r\n    pm.response.to.have.status(201);\r\n});\r\n\r\npm.test(\"Status inicial do pedido é PENDENTE\", function () {\r\n    pm.expect(resposta.status).to.eql(\"PENDENTE\");\r\n});\r\n\r\npm.test(\"Valor total calculado corretamente\", function () {\r\n    pm.expect(resposta.valor_total).to.eql(24);\r\n});\r\n\r\npm.environment.set(\"pedido_id\", resposta.id);"
+                  "const resposta = pm.response.json();\r\n\r\npm.test(\"Retorna HTTP 422\", function () {\r\n    pm.response.to.have.status(422);\r\n});\r\n\r\npm.test(\"Mensagem de validação é retornada\", function () {\r\n    pm.expect(resposta.erro.mensagem)\r\n        .to.eql(\"Os dados enviados são inválidos\");\r\n});\r\n\r\npm.test(\"Identifica cliente_id como campo obrigatório\", function () {\r\n    const detalhes = resposta.erro.detalhes;\r\n\r\n    pm.expect(detalhes).to.be.an(\"array\");\r\n\r\n    pm.expect(\r\n        detalhes.some(item =>\r\n            item.loc.includes(\"cliente_id\") &&\r\n            item.type === \"missing\"\r\n        )\r\n    ).to.eql(true);\r\n});"
                 ]
               }
             }
@@ -182,7 +182,7 @@
             "header": [],
             "body": {
               "mode": "raw",
-              "raw": "{\r\n  \"cliente_id\": 1,\r\n  \"unidade_id\": 1,\r\n  \"canal_pedido\": \"APP\",\r\n  \"itens\": [\r\n    {\r\n      \"produto_id\": 2,\r\n      \"quantidade\": 1\r\n    },\r\n    {\r\n      \"produto_id\": 4,\r\n      \"quantidade\": 2\r\n    }\r\n  ]\r\n}",
+              "raw": "{\r\n  \"unidade_id\": 1,\r\n  \"canal_pedido\": \"APP\",\r\n  \"itens\": [\r\n    {\r\n      \"produto_id\": 2,\r\n      \"quantidade\": 1\r\n    },\r\n    {\r\n      \"produto_id\": 4,\r\n      \"quantidade\": 2\r\n    }\r\n  ]\r\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -439,7 +439,7 @@
               "script": {
                 "type": "text/javascript",
                 "exec": [
-                  "const resposta = pm.response.json();\r\n\r\npm.test(\"Pagamento processado com sucesso\", function () {\r\n    pm.response.to.have.status(200);\r\n});\r\n\r\npm.test(\"Pagamento foi recusado\", function () {\r\n    pm.expect(resposta.status_pagamento).to.eql(\"RECUSADO\");\r\n});\r\n\r\npm.test(\"Pedido atualizado para PAGAMENTO_RECUSADO\", function () {\r\n    pm.expect(resposta.status_pedido).to.eql(\"PAGAMENTO_RECUSADO\");\r\n});\r\n\r\npm.test(\"Valor do pagamento correto\", function () {\r\n    pm.expect(resposta.valor).to.eql(7);\r\n});"
+                  "const resposta = pm.response.json();\r\n\r\npm.test(\"Pagamento processado com sucesso\", function () {\r\n    pm.response.to.have.status(200);\r\n});\r\n\r\npm.test(\"Pagamento foi recusado\", function () {\r\n    pm.expect(resposta.status_pagamento).to.eql(\"RECUSADO\");\r\n});\r\n\r\npm.test(\"Pedido atualizado para PAGAMENTO_RECUSADO\", function () {\r\n    pm.expect(resposta.status_pedido).to.eql(\"PAGAMENTO_RECUSADO\");\r\n});\r\n\r\npm.test(\"Valor do pagamento correto\", function () {\r\n    pm.expect(resposta.valor).to.eql(16);\r\n});"
                 ]
               }
             }
@@ -494,6 +494,41 @@
               "path": [
                 "pedidos",
                 ""
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Listar pedidos - Filtro por canal",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status HTTP 200\", function () {\r\n    pm.response.to.have.status(200);\r\n});\r\n\r\npm.test(\"Todos os pedidos pertencem ao canal APP\", function () {\r\n    const pedidos = pm.response.json();\r\n\r\n    pm.expect(pedidos).to.be.an(\"array\");\r\n\r\n    pedidos.forEach(function (pedido) {\r\n        pm.expect(pedido.canal_pedido).to.eql(\"APP\");\r\n    });\r\n});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/pedidos/?canal_pedido=APP",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "pedidos",
+                ""
+              ],
+              "query": [
+                {
+                  "key": "canal_pedido",
+                  "value": "APP"
+                }
               ]
             }
           },
