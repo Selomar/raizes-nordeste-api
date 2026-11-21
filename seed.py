@@ -4,7 +4,8 @@ import sys
 scripts = [
     "criar_unidades.py",
     "criar_produtos.py",
-    "criar_clientes.py"
+    "criar_clientes.py",
+    "criar_estoque.py"
 ]
 
 for script in scripts:

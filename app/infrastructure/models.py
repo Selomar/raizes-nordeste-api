@@ -2,7 +2,7 @@ from datetime import datetime
 
 from app.infrastructure.database import Base
 from sqlalchemy.orm import Mapped, mapped_column
-from sqlalchemy import Integer, String, Numeric, ForeignKey, CheckConstraint, Boolean, DateTime, func
+from sqlalchemy import Integer, String, Numeric, ForeignKey, CheckConstraint, Boolean, DateTime, func, UniqueConstraint
 
 class Pedido(Base):
     __tablename__ = "pedidos"
@@ -263,4 +263,37 @@ class LogAuditoria(Base):
         DateTime(timezone=True),
         nullable=False,
         server_default=func.now()
+    )
+
+class Estoque(Base):
+    __tablename__ = "estoques"
+    __table_args__ = (
+        CheckConstraint("quantidade >= 0"),
+        UniqueConstraint(
+            "produto_id",
+            "unidade_id",
+            name="uq_estoque_produto_unidade"
+        ),
+    )
+
+    id: Mapped[int] = mapped_column(
+        Integer,
+        primary_key=True
+    )
+
+    produto_id: Mapped[int] = mapped_column(
+        Integer,
+        ForeignKey("produtos.id"),
+        nullable=False
+    )
+
+    unidade_id: Mapped[int] = mapped_column(
+        Integer,
+        ForeignKey("unidades.id"),
+        nullable=False
+    )
+
+    quantidade: Mapped[int] = mapped_column(
+        Integer,
+        nullable=False
     )

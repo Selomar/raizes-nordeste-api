@@ -533,6 +533,107 @@
             }
           },
           "response": []
+        },
+        {
+          "name": "Criar pedido - Estoque insuficiente",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/pedidos/",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "pedidos",
+                ""
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"cliente_id\": 1,\n  \"unidade_id\": 1,\n  \"canal_pedido\": \"APP\",\n  \"itens\": [\n    {\n      \"produto_id\": 1,\n      \"quantidade\": 21\n    }\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "description": "Pré-condição: executar o seed, que cadastra 20 unidades do produto ID 1 na Unidade Centro. O pedido solicita 21 unidades para provocar insuficiência no pagamento."
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const resposta = pm.response.json();",
+                  "",
+                  "pm.test(\"Pedido de teste de estoque criado\", function () {",
+                  "    pm.response.to.have.status(201);",
+                  "});",
+                  "",
+                  "pm.test(\"Pedido inicia como PENDENTE\", function () {",
+                  "    pm.expect(resposta.status).to.eql(\"PENDENTE\");",
+                  "});",
+                  "",
+                  "pm.test(\"ID do pedido foi salvo para a próxima requisição\", function () {",
+                  "    pm.expect(resposta.id).to.exist;",
+                  "    pm.environment.set(\"pedido_estoque_insuficiente_id\", resposta.id);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Processar pagamento - Estoque insuficiente",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/pedidos/{{pedido_estoque_insuficiente_id}}/pagamento",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "pedidos",
+                "{{pedido_estoque_insuficiente_id}}",
+                "pagamento"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"aprovado\": true\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "description": "Pré-condição: executar antes a requisição 'Criar pedido - Estoque insuficiente'. O produto ID 1 tem 20 unidades na Unidade Centro, enquanto o pedido solicita 21."
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const resposta = pm.response.json();",
+                  "",
+                  "pm.test(\"Pagamento com estoque insuficiente retorna HTTP 409\", function () {",
+                  "    pm.response.to.have.status(409);",
+                  "});",
+                  "",
+                  "pm.test(\"Erro informa estoque insuficiente\", function () {",
+                  "    pm.expect(resposta.erro.codigo).to.eql(409);",
+                  "    pm.expect(resposta.erro.mensagem).to.include(\"Estoque insuficiente\");",
+                  "});"
+                ]
+              }
+            }
+          ]
         }
       ]
     },

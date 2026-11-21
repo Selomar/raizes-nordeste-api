@@ -13,7 +13,8 @@ from app.infrastructure.models import (
     Cliente as ClienteModel,
     Unidade as UnidadeModel,
     Pagamento as PagamentoModel,
-    Usuario
+    Usuario,
+    Estoque as EstoqueModel
 )
 from app.schemas.pedido import (
     PedidoCriacao,
@@ -164,7 +165,7 @@ def processar_pagamento(
 ):
     pedido = db.query(PedidoModel).filter(
         PedidoModel.id == pedido_id
-    ).first()
+    ).with_for_update().first()
 
     if pedido is None:
         raise HTTPException(
@@ -173,8 +174,8 @@ def processar_pagamento(
         )
 
     if (
-            usuario.perfil == "OPERADOR"
-            and usuario.unidade_id != pedido.unidade_id
+        usuario.perfil == "OPERADOR"
+        and usuario.unidade_id != pedido.unidade_id
     ):
         registrar_log(
             usuario_id=usuario.id,
@@ -195,21 +196,54 @@ def processar_pagamento(
             detail="Este pedido não está pendente de pagamento"
         )
 
-    if dados.aprovado:
-        status_pagamento = "APROVADO"
-        status_pedido = "PAGO"
-    else:
-        status_pagamento = "RECUSADO"
-        status_pedido = "PAGAMENTO_RECUSADO"
-
-    novo_pagamento = PagamentoModel(
-        pedido_id=pedido.id,
-        valor=pedido.valor_total,
-        status=status_pagamento,
-        identificador_externo=str(uuid4())
-    )
-
     try:
+        if dados.aprovado:
+            itens = db.query(ItemPedidoModel).filter(
+                ItemPedidoModel.pedido_id == pedido.id
+            ).all()
+
+            quantidades = {}
+
+            for item in itens:
+                quantidades[item.produto_id] = (
+                    quantidades.get(item.produto_id, 0)
+                    + item.quantidade
+                )
+
+            estoques = {}
+
+            for produto_id, quantidade in quantidades.items():
+                estoque = db.query(EstoqueModel).filter(
+                    EstoqueModel.produto_id == produto_id,
+                    EstoqueModel.unidade_id == pedido.unidade_id
+                ).with_for_update().first()
+
+                if estoque is None or estoque.quantidade < quantidade:
+                    db.rollback()
+                    raise HTTPException(
+                        status_code=409,
+                        detail=f"Estoque insuficiente para o produto ID {produto_id}"
+                    )
+
+                estoques[produto_id] = estoque
+
+            for produto_id, quantidade in quantidades.items():
+                estoques[produto_id].quantidade -= quantidade
+
+            status_pagamento = "APROVADO"
+            status_pedido = "PAGO"
+
+        else:
+            status_pagamento = "RECUSADO"
+            status_pedido = "PAGAMENTO_RECUSADO"
+
+        novo_pagamento = PagamentoModel(
+            pedido_id=pedido.id,
+            valor=pedido.valor_total,
+            status=status_pagamento,
+            identificador_externo=str(uuid4())
+        )
+
         pedido.status = status_pedido
         db.add(novo_pagamento)
         db.commit()
@@ -222,6 +256,9 @@ def processar_pagamento(
             entidade_id=novo_pagamento.id,
             resultado=status_pagamento
         )
+
+    except HTTPException:
+        raise
 
     except SQLAlchemyError:
         db.rollback()
