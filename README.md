@@ -26,16 +26,23 @@ A API contempla as seguintes funcionalidades:
 - Autenticação de usuários por meio de tokens JWT.
 - Controle de acesso conforme o perfil do usuário e sua unidade de vinculação.
 - Registro de operações relevantes para fins de auditoria.
+- Consulta de pedidos com filtragem por canal de atendimento.
+- Controle de estoque por produto e unidade.
+- Baixa automática do estoque após pagamento aprovado.
+- Bloqueio do processamento do pagamento quando o estoque é insuficiente.
 
 ### 2.2. Fluxo principal implementado
 
 O fluxo escolhido para o desenvolvimento foi o processamento de pedidos, seguindo as etapas:
 
-1. O usuário autenticado solicita a criação de um pedido, informando o cliente, a unidade e os produtos desejados.
+1. O usuário autenticado solicita a criação de um pedido, informando cliente, unidade, canal de atendimento e produtos desejados.
 2. A API verifica as informações recebidas e valida os dados necessários.
-3. O valor total do pedido é calculado automaticamente com base nos produtos e nas respectivas quantidades.
+3. O valor total do pedido é calculado automaticamente.
 4. O pagamento é processado de forma simulada.
-5. Conforme o resultado do pagamento, o status do pedido é atualizado.
+5. Quando o pagamento é aprovado, a API verifica a disponibilidade dos produtos no estoque da unidade.
+6. Se houver estoque suficiente, as quantidades são reduzidas e o pedido recebe o status PAGO.
+7. Se o estoque for insuficiente, a API retorna HTTP 409, mantém o pedido PENDENTE e não altera o estoque.
+8. Se o pagamento for recusado, o pedido recebe o status PAGAMENTO_RECUSADO.
 
 Os resultados possíveis são:
 
@@ -100,19 +107,40 @@ raizes-nordeste-api/
 │   └── __init__.py
 │
 ├── docs/
-│   └── postman/
-│       ├── Rede Raízes - Exemplo.postman_environment.json
-│       └── Rede Raízes do Nordeste API.postman_collection.json
+│   ├── postman/
+│   │   ├── Rede Raízes - Exemplo.postman_environment.json
+│   │   └── Rede Raízes do Nordeste API.postman_collection.json
+│   ├── diagrams/
+│   │   ├── Arquitetura_Raizes_do_Nordeste.png
+│   │   ├── Casos_de_uso_Raizes_do_Nordeste.png
+│   │   ├── Classes_Raizes_do_Nordeste.png
+│   │   ├── DER_Raizes_do_Nordeste.drawio
+│   │   ├── Entidade-Relacionamento_Raizes_do_Nordeste.png
+│   │   └── Sequencia_Raizes_do_Nordeste.png
+│   ├── evidencias/
+│   │   ├── Evidencia_01_resultado_testes.png
+│   │   ├── Evidencia_02_login_JWT.png
+│   │   ├── Evidencia_03_criacao_pedido.png
+│   │   ├── Evidencia_04_pagamento_aprovado.png
+│   │   ├── Evidencia_05_pagamento_recusado.png
+│   │   ├── Evidencia_06_acesso_sem_autenticação.png
+│   │   ├── Evidencia_07_controle_de_permissão.png
+│   │   ├── Evidencia_08_campo_obrigatorio_ausente.png
+│   │   └── Evidencia_09_filtro_por_canal.png
+│   └── testes/
+│       └── PLANO_DE_TESTES.md
 │
 ├── migrations/
 │   ├── versions/
-│   │   └── 46c96f82e7ee_criacao_inicial_das_tabelas.py
+│   │   ├── 46c96f82e7ee_criacao_inicial_das_tabelas.py
+│   │   └── 83f8dbdab3c4_adiciona_tabela_de_estoque.py
 │   ├── env.py
 │   ├── README
 │   └── script.py.mako
 │
 ├── criar_admin.py
 ├── criar_clientes.py
+├── criar_estoque.py
 ├── criar_operador.py
 ├── criar_produtos.py
 ├── criar_unidades.py
@@ -255,7 +283,7 @@ Execute:
 python seed.py
 ```
 
-O script realiza o cadastro inicial das unidades, dos produtos e dos clientes utilizados no sistema.
+O script realiza o cadastro inicial das unidades, dos produtos, dos clientes e dos registros de estoque utilizados pelo sistema.
 
 ### 8.3. Criar o usuário administrador
 
@@ -316,8 +344,16 @@ A API disponibiliza os seguintes endpoints principais:
 | POST | `/auth/login` | Realiza o login e retorna o token JWT | Não |
 | GET | `/auth/me` | Consulta os dados do usuário autenticado | Sim |
 | GET | `/pedidos/` | Lista os pedidos conforme as permissões do usuário | Sim |
-| POST | `/pedidos/` | Cria um novo pedido | Sim |
+| POST | `/pedidos/` | Cria um novo pedido. Canal obrigatório | Sim |
 | POST | `/pedidos/{pedido_id}/pagamento` | Processa o pagamento simulado e atualiza o status do pedido | Sim |
+
+O endpoint GET /pedidos/ permite filtrar os pedidos pelo parâmetro canal_pedido, aceitando os seguintes valores:
+
+- APP
+- TOTEM
+- BALCAO
+- PICKUP
+- WEB
 
 ### 10.1. Autenticação
 
@@ -385,16 +421,19 @@ A coleção contempla testes relacionados a:
 
 - Autenticação e consulta do usuário autenticado.
 - Criação e consulta de pedidos.
+- Filtragem de pedidos por canal de atendimento.
 - Aprovação e recusa de pagamentos.
+- Controle de estoque após pagamento aprovado.
+- Bloqueio de pagamentos quando o estoque é insuficiente.
 - Tentativa de processamento duplicado de pagamento.
 - Envio de dados inválidos.
 - Consulta de produtos, clientes e unidades inexistentes.
 - Bloqueio de acesso sem autenticação.
 - Restrição de permissões entre perfis e unidades.
 
-Durante o desenvolvimento, foi realizada uma execução da coleção que apresentou o seguinte resultado:
+Durante o desenvolvimento, foram realizadas execuções da coleção e testes complementares no Swagger e no PostgreSQL.
 
-**42 testes aprovados e nenhum teste reprovado.**
+Resultado da última execução completa registrada: 53 verificações automatizadas aprovadas, nenhuma reprovação e 20 requisições executadas.
 
 Os testes devem ser executados com a API conectada a um banco de dados de teste ou a uma base preparada especificamente para essa finalidade, evitando alterações indesejadas nos dados utilizados em outros ambientes.
 

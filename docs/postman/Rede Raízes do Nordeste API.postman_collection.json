@@ -1,10 +1,10 @@
 {
   "info": {
-    "_postman_id": "824f86fa-6f91-4cd7-804d-f7f3bf7c14f7",
+    "_postman_id": "d01feff4-bff6-4e11-ac3e-42b4bba0c7c0",
     "name": "Rede Raízes do Nordeste API",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
     "_exporter_id": "56224072",
-    "_collection_link": "https://go.postman.co/collection/56224072-824f86fa-6f91-4cd7-804d-f7f3bf7c14f7?source=collection_link"
+    "_collection_link": "https://go.postman.co/collection/56224072-d01feff4-bff6-4e11-ac3e-42b4bba0c7c0?source=collection_link"
   },
   "item": [
     {
@@ -31,48 +31,7 @@
             "header": [],
             "body": {
               "mode": "raw",
-              "raw": "{\r\n    \"email\": \"admin@teste.com\",\r\n    \"senha\": \"123456789\"\r\n}",
-              "options": {
-                "raw": {
-                  "language": "json"
-                }
-              }
-            },
-            "url": {
-              "raw": "{{base_url}}/auth/login",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "auth",
-                "login"
-              ]
-            }
-          },
-          "response": []
-        },
-        {
-          "name": "Login - Operador",
-          "event": [
-            {
-              "listen": "test",
-              "script": {
-                "type": "text/javascript",
-                "exec": [
-                  "const resposta = pm.response.json();\r\n\r\npm.test(\"Login realizado com sucesso\", function () {\r\n    pm.response.to.have.status(200);\r\n});\r\n\r\npm.environment.set(\"token\", resposta.access_token);\r\n\r\nconsole.log(\"Token salvo:\", pm.environment.get(\"token\") ? \"SIM\" : \"NÃO\");"
-                ]
-              }
-            }
-          ],
-          "request": {
-            "auth": {
-              "type": "noauth"
-            },
-            "method": "POST",
-            "header": [],
-            "body": {
-              "mode": "raw",
-              "raw": "{\r\n    \"email\": \"bruno@gmail.com\",\r\n    \"senha\": \"123456789\"\r\n}",
+              "raw": "{\r\n    \"email\": \"selomarjun@gmail.com\",\r\n    \"senha\": \"12079812\"\r\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -145,196 +104,6 @@
             "body": {
               "mode": "raw",
               "raw": "{\r\n  \"cliente_id\": 1,\r\n  \"unidade_id\": 1,\r\n  \"canal_pedido\": \"APP\",\r\n  \"itens\": [\r\n    {\r\n      \"produto_id\": 2,\r\n      \"quantidade\": 1\r\n    },\r\n    {\r\n      \"produto_id\": 4,\r\n      \"quantidade\": 2\r\n    }\r\n  ]\r\n}",
-              "options": {
-                "raw": {
-                  "language": "json"
-                }
-              }
-            },
-            "url": {
-              "raw": "{{base_url}}/pedidos/",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "pedidos",
-                ""
-              ]
-            }
-          },
-          "response": []
-        },
-        {
-          "name": "Criar pedido - Campo obrigatório ausente",
-          "event": [
-            {
-              "listen": "test",
-              "script": {
-                "type": "text/javascript",
-                "exec": [
-                  "const resposta = pm.response.json();\r\n\r\npm.test(\"Retorna HTTP 422\", function () {\r\n    pm.response.to.have.status(422);\r\n});\r\n\r\npm.test(\"Mensagem de validação é retornada\", function () {\r\n    pm.expect(resposta.erro.mensagem)\r\n        .to.eql(\"Os dados enviados são inválidos\");\r\n});\r\n\r\npm.test(\"Identifica cliente_id como campo obrigatório\", function () {\r\n    const detalhes = resposta.erro.detalhes;\r\n\r\n    pm.expect(detalhes).to.be.an(\"array\");\r\n\r\n    pm.expect(\r\n        detalhes.some(item =>\r\n            item.loc.includes(\"cliente_id\") &&\r\n            item.type === \"missing\"\r\n        )\r\n    ).to.eql(true);\r\n});"
-                ]
-              }
-            }
-          ],
-          "request": {
-            "method": "POST",
-            "header": [],
-            "body": {
-              "mode": "raw",
-              "raw": "{\r\n  \"unidade_id\": 1,\r\n  \"canal_pedido\": \"APP\",\r\n  \"itens\": [\r\n    {\r\n      \"produto_id\": 2,\r\n      \"quantidade\": 1\r\n    },\r\n    {\r\n      \"produto_id\": 4,\r\n      \"quantidade\": 2\r\n    }\r\n  ]\r\n}",
-              "options": {
-                "raw": {
-                  "language": "json"
-                }
-              }
-            },
-            "url": {
-              "raw": "{{base_url}}/pedidos/",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "pedidos",
-                ""
-              ]
-            }
-          },
-          "response": []
-        },
-        {
-          "name": "Criar pedido - Unidade inexistente",
-          "event": [
-            {
-              "listen": "test",
-              "script": {
-                "type": "text/javascript",
-                "exec": [
-                  "const resposta = pm.response.json();\r\n\r\npm.test(\"Unidade inexistente deve ser rejeitada\", function () {\r\n    pm.response.to.have.status(404);\r\n});\r\n\r\npm.test(\"Erro possui formato padronizado\", function () {\r\n    pm.expect(resposta).to.have.property(\"erro\");\r\n    pm.expect(resposta.erro.codigo).to.eql(404);\r\n});\r\n\r\npm.test(\"Mensagem identifica a unidade não encontrada\", function () {\r\n    pm.expect(resposta.erro.mensagem).to.include(\"Unidade\");\r\n});"
-                ]
-              }
-            }
-          ],
-          "request": {
-            "method": "POST",
-            "header": [],
-            "body": {
-              "mode": "raw",
-              "raw": "{\r\n  \"cliente_id\": 1,\r\n  \"unidade_id\": 99999,\r\n  \"canal_pedido\": \"APP\",\r\n  \"itens\": [\r\n    {\r\n      \"produto_id\": 2,\r\n      \"quantidade\": 1\r\n    }\r\n  ]\r\n}",
-              "options": {
-                "raw": {
-                  "language": "json"
-                }
-              }
-            },
-            "url": {
-              "raw": "{{base_url}}/pedidos/",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "pedidos",
-                ""
-              ]
-            }
-          },
-          "response": []
-        },
-        {
-          "name": "Criar pedido - Cliente inexistente",
-          "event": [
-            {
-              "listen": "test",
-              "script": {
-                "type": "text/javascript",
-                "exec": [
-                  "const resposta = pm.response.json();\r\n\r\npm.test(\"Cliente inexistente deve ser rejeitado\", function () {\r\n    pm.response.to.have.status(404);\r\n});\r\n\r\npm.test(\"Erro possui formato padronizado\", function () {\r\n    pm.expect(resposta).to.have.property(\"erro\");\r\n    pm.expect(resposta.erro.codigo).to.eql(404);\r\n});\r\n\r\npm.test(\"Mensagem identifica o cliente não encontrado\", function () {\r\n    pm.expect(resposta.erro.mensagem).to.include(\"Cliente\");\r\n});"
-                ]
-              }
-            }
-          ],
-          "request": {
-            "method": "POST",
-            "header": [],
-            "body": {
-              "mode": "raw",
-              "raw": "{\r\n  \"cliente_id\": 9999,\r\n  \"unidade_id\": 1,\r\n  \"canal_pedido\": \"APP\",\r\n  \"itens\": [\r\n    {\r\n      \"produto_id\": 2,\r\n      \"quantidade\": 1\r\n    },\r\n    {\r\n      \"produto_id\": 4,\r\n      \"quantidade\": 2\r\n    }\r\n  ]\r\n}",
-              "options": {
-                "raw": {
-                  "language": "json"
-                }
-              }
-            },
-            "url": {
-              "raw": "{{base_url}}/pedidos/",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "pedidos",
-                ""
-              ]
-            }
-          },
-          "response": []
-        },
-        {
-          "name": "Criar pedido - Produto inexistente",
-          "event": [
-            {
-              "listen": "test",
-              "script": {
-                "type": "text/javascript",
-                "exec": [
-                  "const resposta = pm.response.json();\r\n\r\npm.test(\"Produto inexistente deve ser rejeitado\", function () {\r\n    pm.response.to.have.status(404);\r\n});\r\n\r\npm.test(\"Erro possui formato padronizado\", function () {\r\n    pm.expect(resposta).to.have.property(\"erro\");\r\n    pm.expect(resposta.erro.codigo).to.eql(404);\r\n});\r\n\r\npm.test(\"Mensagem identifica o produto não encontrado\", function () {\r\n    pm.expect(resposta.erro.mensagem).to.include(\"Produto\");\r\n});"
-                ]
-              }
-            }
-          ],
-          "request": {
-            "method": "POST",
-            "header": [],
-            "body": {
-              "mode": "raw",
-              "raw": "{\r\n  \"cliente_id\": 1,\r\n  \"unidade_id\": 1,\r\n  \"canal_pedido\": \"APP\",\r\n  \"itens\": [\r\n    {\r\n      \"produto_id\": 99999,\r\n      \"quantidade\": 1\r\n    },\r\n    {\r\n      \"produto_id\": 4,\r\n      \"quantidade\": 2\r\n    }\r\n  ]\r\n}",
-              "options": {
-                "raw": {
-                  "language": "json"
-                }
-              }
-            },
-            "url": {
-              "raw": "{{base_url}}/pedidos/",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "pedidos",
-                ""
-              ]
-            }
-          },
-          "response": []
-        },
-        {
-          "name": "Criar pedido - Quantidade inválida",
-          "event": [
-            {
-              "listen": "test",
-              "script": {
-                "type": "text/javascript",
-                "exec": [
-                  "const resposta = pm.response.json();\r\n\r\npm.test(\"Quantidade negativa deve ser rejeitada\", function () {\r\n    pm.response.to.have.status(422);\r\n});\r\n\r\npm.test(\"Erro possui formato padronizado\", function () {\r\n    pm.expect(resposta).to.have.property(\"erro\");\r\n    pm.expect(resposta.erro.codigo).to.eql(422);\r\n});\r\n\r\npm.test(\"Erro identifica dados inválidos\", function () {\r\n    pm.expect(resposta.erro.mensagem).to.include(\"inválidos\");\r\n});"
-                ]
-              }
-            }
-          ],
-          "request": {
-            "method": "POST",
-            "header": [],
-            "body": {
-              "mode": "raw",
-              "raw": "{\r\n  \"cliente_id\": 1,\r\n  \"unidade_id\": 1,\r\n  \"canal_pedido\": \"APP\",\r\n  \"itens\": [\r\n    {\r\n      \"produto_id\": 2,\r\n      \"quantidade\": 1\r\n    },\r\n    {\r\n      \"produto_id\": 4,\r\n      \"quantidade\": -1\r\n    }\r\n  ]\r\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -535,10 +304,30 @@
           "response": []
         },
         {
-          "name": "Criar pedido - Estoque insuficiente",
+          "name": "Criar pedido - Campo obrigatório ausente",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const resposta = pm.response.json();\r\n\r\npm.test(\"Retorna HTTP 422\", function () {\r\n    pm.response.to.have.status(422);\r\n});\r\n\r\npm.test(\"Mensagem de validação é retornada\", function () {\r\n    pm.expect(resposta.erro.mensagem)\r\n        .to.eql(\"Os dados enviados são inválidos\");\r\n});\r\n\r\npm.test(\"Identifica cliente_id como campo obrigatório\", function () {\r\n    const detalhes = resposta.erro.detalhes;\r\n\r\n    pm.expect(detalhes).to.be.an(\"array\");\r\n\r\n    pm.expect(\r\n        detalhes.some(item =>\r\n            item.loc.includes(\"cliente_id\") &&\r\n            item.type === \"missing\"\r\n        )\r\n    ).to.eql(true);\r\n});"
+                ]
+              }
+            }
+          ],
           "request": {
             "method": "POST",
             "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"unidade_id\": 1,\r\n  \"canal_pedido\": \"APP\",\r\n  \"itens\": [\r\n    {\r\n      \"produto_id\": 2,\r\n      \"quantidade\": 1\r\n    },\r\n    {\r\n      \"produto_id\": 4,\r\n      \"quantidade\": 2\r\n    }\r\n  ]\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
             "url": {
               "raw": "{{base_url}}/pedidos/",
               "host": [
@@ -548,98 +337,162 @@
                 "pedidos",
                 ""
               ]
-            },
-            "body": {
-              "mode": "raw",
-              "raw": "{\n  \"cliente_id\": 1,\n  \"unidade_id\": 1,\n  \"canal_pedido\": \"APP\",\n  \"itens\": [\n    {\n      \"produto_id\": 1,\n      \"quantidade\": 21\n    }\n  ]\n}",
-              "options": {
-                "raw": {
-                  "language": "json"
-                }
-              }
-            },
-            "description": "Pré-condição: executar o seed, que cadastra 20 unidades do produto ID 1 na Unidade Centro. O pedido solicita 21 unidades para provocar insuficiência no pagamento."
+            }
           },
-          "response": [],
+          "response": []
+        },
+        {
+          "name": "Criar pedido - Unidade inexistente",
           "event": [
             {
               "listen": "test",
               "script": {
                 "type": "text/javascript",
                 "exec": [
-                  "const resposta = pm.response.json();",
-                  "",
-                  "pm.test(\"Pedido de teste de estoque criado\", function () {",
-                  "    pm.response.to.have.status(201);",
-                  "});",
-                  "",
-                  "pm.test(\"Pedido inicia como PENDENTE\", function () {",
-                  "    pm.expect(resposta.status).to.eql(\"PENDENTE\");",
-                  "});",
-                  "",
-                  "pm.test(\"ID do pedido foi salvo para a próxima requisição\", function () {",
-                  "    pm.expect(resposta.id).to.exist;",
-                  "    pm.environment.set(\"pedido_estoque_insuficiente_id\", resposta.id);",
-                  "});"
+                  "const resposta = pm.response.json();\r\n\r\npm.test(\"Unidade inexistente deve ser rejeitada\", function () {\r\n    pm.response.to.have.status(404);\r\n});\r\n\r\npm.test(\"Erro possui formato padronizado\", function () {\r\n    pm.expect(resposta).to.have.property(\"erro\");\r\n    pm.expect(resposta.erro.codigo).to.eql(404);\r\n});\r\n\r\npm.test(\"Mensagem identifica a unidade não encontrada\", function () {\r\n    pm.expect(resposta.erro.mensagem).to.include(\"Unidade\");\r\n});"
                 ]
               }
             }
-          ]
-        },
-        {
-          "name": "Processar pagamento - Estoque insuficiente",
+          ],
           "request": {
             "method": "POST",
             "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"cliente_id\": 1,\r\n  \"unidade_id\": 99999,\r\n  \"canal_pedido\": \"APP\",\r\n  \"itens\": [\r\n    {\r\n      \"produto_id\": 2,\r\n      \"quantidade\": 1\r\n    }\r\n  ]\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
             "url": {
-              "raw": "{{base_url}}/pedidos/{{pedido_estoque_insuficiente_id}}/pagamento",
+              "raw": "{{base_url}}/pedidos/",
               "host": [
                 "{{base_url}}"
               ],
               "path": [
                 "pedidos",
-                "{{pedido_estoque_insuficiente_id}}",
-                "pagamento"
+                ""
               ]
-            },
-            "body": {
-              "mode": "raw",
-              "raw": "{\n  \"aprovado\": true\n}",
-              "options": {
-                "raw": {
-                  "language": "json"
-                }
-              }
-            },
-            "description": "Pré-condição: executar antes a requisição 'Criar pedido - Estoque insuficiente'. O produto ID 1 tem 20 unidades na Unidade Centro, enquanto o pedido solicita 21."
+            }
           },
-          "response": [],
+          "response": []
+        },
+        {
+          "name": "Criar pedido - Cliente inexistente",
           "event": [
             {
               "listen": "test",
               "script": {
                 "type": "text/javascript",
                 "exec": [
-                  "const resposta = pm.response.json();",
-                  "",
-                  "pm.test(\"Pagamento com estoque insuficiente retorna HTTP 409\", function () {",
-                  "    pm.response.to.have.status(409);",
-                  "});",
-                  "",
-                  "pm.test(\"Erro informa estoque insuficiente\", function () {",
-                  "    pm.expect(resposta.erro.codigo).to.eql(409);",
-                  "    pm.expect(resposta.erro.mensagem).to.include(\"Estoque insuficiente\");",
-                  "});"
+                  "const resposta = pm.response.json();\r\n\r\npm.test(\"Cliente inexistente deve ser rejeitado\", function () {\r\n    pm.response.to.have.status(404);\r\n});\r\n\r\npm.test(\"Erro possui formato padronizado\", function () {\r\n    pm.expect(resposta).to.have.property(\"erro\");\r\n    pm.expect(resposta.erro.codigo).to.eql(404);\r\n});\r\n\r\npm.test(\"Mensagem identifica o cliente não encontrado\", function () {\r\n    pm.expect(resposta.erro.mensagem).to.include(\"Cliente\");\r\n});"
                 ]
               }
             }
-          ]
-        }
-      ]
-    },
-    {
-      "name": "03 - Segurança e permissões",
-      "item": [
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"cliente_id\": 9999,\r\n  \"unidade_id\": 1,\r\n  \"canal_pedido\": \"APP\",\r\n  \"itens\": [\r\n    {\r\n      \"produto_id\": 2,\r\n      \"quantidade\": 1\r\n    },\r\n    {\r\n      \"produto_id\": 4,\r\n      \"quantidade\": 2\r\n    }\r\n  ]\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/pedidos/",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "pedidos",
+                ""
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Criar pedido - Produto inexistente",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const resposta = pm.response.json();\r\n\r\npm.test(\"Produto inexistente deve ser rejeitado\", function () {\r\n    pm.response.to.have.status(404);\r\n});\r\n\r\npm.test(\"Erro possui formato padronizado\", function () {\r\n    pm.expect(resposta).to.have.property(\"erro\");\r\n    pm.expect(resposta.erro.codigo).to.eql(404);\r\n});\r\n\r\npm.test(\"Mensagem identifica o produto não encontrado\", function () {\r\n    pm.expect(resposta.erro.mensagem).to.include(\"Produto\");\r\n});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"cliente_id\": 1,\r\n  \"unidade_id\": 1,\r\n  \"canal_pedido\": \"APP\",\r\n  \"itens\": [\r\n    {\r\n      \"produto_id\": 99999,\r\n      \"quantidade\": 1\r\n    },\r\n    {\r\n      \"produto_id\": 4,\r\n      \"quantidade\": 2\r\n    }\r\n  ]\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/pedidos/",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "pedidos",
+                ""
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Criar pedido - Quantidade inválida",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const resposta = pm.response.json();\r\n\r\npm.test(\"Quantidade negativa deve ser rejeitada\", function () {\r\n    pm.response.to.have.status(422);\r\n});\r\n\r\npm.test(\"Erro possui formato padronizado\", function () {\r\n    pm.expect(resposta).to.have.property(\"erro\");\r\n    pm.expect(resposta.erro.codigo).to.eql(422);\r\n});\r\n\r\npm.test(\"Erro identifica dados inválidos\", function () {\r\n    pm.expect(resposta.erro.mensagem).to.include(\"inválidos\");\r\n});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"cliente_id\": 1,\r\n  \"unidade_id\": 1,\r\n  \"canal_pedido\": \"APP\",\r\n  \"itens\": [\r\n    {\r\n      \"produto_id\": 2,\r\n      \"quantidade\": 1\r\n    },\r\n    {\r\n      \"produto_id\": 4,\r\n      \"quantidade\": -1\r\n    }\r\n  ]\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/pedidos/",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "pedidos",
+                ""
+              ]
+            }
+          },
+          "response": []
+        },
         {
           "name": "Listar pedidos - Sem autenticação",
           "event": [
@@ -712,6 +565,191 @@
           "response": []
         },
         {
+          "name": "Criar pedido - Estoque insuficiente",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const resposta = pm.response.json();",
+                  "",
+                  "pm.test(\"Pedido de teste de estoque criado\", function () {",
+                  "    pm.response.to.have.status(201);",
+                  "});",
+                  "",
+                  "pm.test(\"Pedido inicia como PENDENTE\", function () {",
+                  "    pm.expect(resposta.status).to.eql(\"PENDENTE\");",
+                  "});",
+                  "",
+                  "pm.test(\"ID do pedido foi salvo para a próxima requisição\", function () {",
+                  "    pm.expect(resposta.id).to.exist;",
+                  "    pm.environment.set(\"pedido_estoque_insuficiente_id\", resposta.id);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"cliente_id\": 1,\n  \"unidade_id\": 1,\n  \"canal_pedido\": \"APP\",\n  \"itens\": [\n    {\n      \"produto_id\": 1,\n      \"quantidade\": 21\n    }\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/pedidos/",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "pedidos",
+                ""
+              ]
+            },
+            "description": "Pré-condição: executar o seed, que cadastra 20 unidades do produto ID 1 na Unidade Centro. O pedido solicita 21 unidades para provocar insuficiência no pagamento."
+          },
+          "response": []
+        },
+        {
+          "name": "Processar pagamento - Estoque insuficiente",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const resposta = pm.response.json();",
+                  "",
+                  "pm.test(\"Pagamento com estoque insuficiente retorna HTTP 409\", function () {",
+                  "    pm.response.to.have.status(409);",
+                  "});",
+                  "",
+                  "pm.test(\"Erro informa estoque insuficiente\", function () {",
+                  "    pm.expect(resposta.erro.codigo).to.eql(409);",
+                  "    pm.expect(resposta.erro.mensagem).to.include(\"Estoque insuficiente\");",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"aprovado\": true\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/pedidos/{{pedido_estoque_insuficiente_id}}/pagamento",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "pedidos",
+                "{{pedido_estoque_insuficiente_id}}",
+                "pagamento"
+              ]
+            },
+            "description": "Pré-condição: executar antes a requisição 'Criar pedido - Estoque insuficiente'. O produto ID 1 tem 20 unidades na Unidade Centro, enquanto o pedido solicita 21."
+          },
+          "response": []
+        },
+        {
+          "name": "Criar pedido - Outra Unidade",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Pedido criado na unidade 2\", function () {\r\n    pm.response.to.have.status(201);\r\n\r\n    const resposta = pm.response.json();\r\n\r\n    pm.expect(resposta.status).to.eql(\"PENDENTE\");\r\n    pm.expect(resposta.unidade_id).to.eql(2);\r\n\r\n    pm.environment.set(\r\n        \"pedido_outra_unidade_id\",\r\n        resposta.id\r\n    );\r\n});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"cliente_id\": 1,\r\n    \"unidade_id\": 2,\r\n    \"canal_pedido\": \"APP\",\r\n    \"itens\": [\r\n        {\r\n            \"produto_id\": 1,\r\n            \"quantidade\": 1\r\n        }\r\n    ]\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/pedidos/",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "pedidos",
+                ""
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "03 - Segurança e permissões",
+      "item": [
+        {
+          "name": "Login - Operador",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const resposta = pm.response.json();\r\n\r\npm.test(\"Login realizado com sucesso\", function () {\r\n    pm.response.to.have.status(200);\r\n});\r\n\r\npm.environment.set(\"token\", resposta.access_token);\r\n\r\nconsole.log(\"Token salvo:\", pm.environment.get(\"token\") ? \"SIM\" : \"NÃO\");"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"email\": \"bruno@gmail.com\",\r\n    \"senha\": \"123456789\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/auth/login",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "auth",
+                "login"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
           "name": "Pagamento - Operador sem permissão",
           "event": [
             {
@@ -737,13 +775,13 @@
               }
             },
             "url": {
-              "raw": "{{base_url}}/pedidos/13/pagamento",
+              "raw": "{{base_url}}/pedidos/{{pedido_outra_unidade_id}}/pagamento",
               "host": [
                 "{{base_url}}"
               ],
               "path": [
                 "pedidos",
-                "13",
+                "{{pedido_outra_unidade_id}}",
                 "pagamento"
               ]
             }
