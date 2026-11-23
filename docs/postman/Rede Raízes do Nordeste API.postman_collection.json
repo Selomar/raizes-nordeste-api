@@ -31,7 +31,7 @@
             "header": [],
             "body": {
               "mode": "raw",
-              "raw": "{\r\n    \"email\": \"selomarjun@gmail.com\",\r\n    \"senha\": \"12079812\"\r\n}",
+              "raw": "{\r\n    \"email\": \"insira seu e-mail aqui\",\r\n    \"senha\": \"insira a senha\"\r\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -729,7 +729,7 @@
             "header": [],
             "body": {
               "mode": "raw",
-              "raw": "{\r\n    \"email\": \"bruno@gmail.com\",\r\n    \"senha\": \"123456789\"\r\n}",
+              "raw": "{\r\n    \"email\": \"insira o email aqui\",\r\n    \"senha\": \"insira a senha\"\r\n}",
               "options": {
                 "raw": {
                   "language": "json"
