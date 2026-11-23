@@ -83,6 +83,7 @@ raizes-nordeste-api/
 │   │   ├── routes/
 │   │   │   ├── __init__.py
 │   │   │   ├── auth.py
+│   │   │   ├── catalogo.py
 │   │   │   └── pedidos.py
 │   │   └── __init__.py
 │   │

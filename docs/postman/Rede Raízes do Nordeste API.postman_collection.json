@@ -4,7 +4,8 @@
     "name": "Rede Raízes do Nordeste API",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
     "_exporter_id": "56224072",
-    "_collection_link": "https://go.postman.co/collection/56224072-d01feff4-bff6-4e11-ac3e-42b4bba0c7c0?source=collection_link"
+    "_collection_link": "https://go.postman.co/collection/56224072-d01feff4-bff6-4e11-ac3e-42b4bba0c7c0?source=collection_link",
+    "description": "Mesma estrutura de requisições e cenários da coleção original. Requer os endpoints /catalogo/* adicionados ao main.py e seed executado. Configure base_url, credenciais do administrador e do operador no ambiente. Os IDs são descobertos automaticamente durante Consultar usuário autenticado."
   },
   "item": [
     {
@@ -18,7 +19,15 @@
               "script": {
                 "type": "text/javascript",
                 "exec": [
-                  "const resposta = pm.response.json();\r\n\r\npm.test(\"Login realizado com sucesso\", function () {\r\n    pm.response.to.have.status(200);\r\n});\r\n\r\npm.environment.set(\"token\", resposta.access_token);\r\n\r\nconsole.log(\"Token salvo:\", pm.environment.get(\"token\") ? \"SIM\" : \"NÃO\");"
+                  "const resposta = pm.response.json();\r",
+                  "\r",
+                  "pm.test(\"Login realizado com sucesso\", function () {\r",
+                  "    pm.response.to.have.status(200);\r",
+                  "});\r",
+                  "\r",
+                  "pm.environment.set(\"token\", resposta.access_token);\r",
+                  "\r",
+                  "console.log(\"Token salvo:\", pm.environment.get(\"token\") ? \"SIM\" : \"NÃO\");"
                 ]
               }
             }
@@ -31,7 +40,7 @@
             "header": [],
             "body": {
               "mode": "raw",
-              "raw": "{\r\n    \"email\": \"insira seu e-mail aqui\",\r\n    \"senha\": \"insira a senha\"\r\n}",
+              "raw": "{\n  \"email\": \"insira seu e-mail aqui\",\n  \"senha\": \"insira a senha\"\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -59,7 +68,69 @@
               "script": {
                 "type": "text/javascript",
                 "exec": [
-                  "const resposta = pm.response.json();\r\n\r\npm.test(\"Consulta do usuário autenticado retorna 200\", function () {\r\n    pm.response.to.have.status(200);\r\n});\r\n\r\npm.test(\"Usuário autenticado possui perfil ADMIN\", function () {\r\n    pm.expect(resposta.perfil).to.eql(\"ADMIN\");\r\n});"
+                  "const resposta = pm.response.json();",
+                  "",
+                  "pm.test(\"Consulta do usuário autenticado retorna 200\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test(\"Usuário autenticado possui perfil ADMIN\", function () {",
+                  "    pm.expect(resposta.perfil).to.eql(\"ADMIN\");",
+                  "});",
+                  "",
+                  "// Descobre os IDs pelo conteúdo do banco, sem presumir sequência de IDs.",
+                  "const base = pm.environment.get(\"base_url\");",
+                  "const token = pm.environment.get(\"token\");",
+                  "const headers = { \"Authorization\": \"Bearer \" + token };",
+                  "",
+                  "function buscar(path, callback) {",
+                  "    pm.sendRequest({ url: base + path, method: \"GET\", header: headers }, function (err, response) {",
+                  "        if (err || response.code !== 200) {",
+                  "            console.error(\"Falha ao consultar \" + path, err || response.text());",
+                  "            return;",
+                  "        }",
+                  "        callback(response.json());",
+                  "    });",
+                  "}",
+                  "",
+                  "buscar(\"/catalogo/clientes\", function(clientes) {",
+                  "    buscar(\"/catalogo/unidades\", function(unidades) {",
+                  "        buscar(\"/catalogo/produtos\", function(produtos) {",
+                  "            const cliente = clientes.find(x => x.email === \"joao.silva@exemplo.com\");",
+                  "            const unidade = unidades.find(x => x.nome === \"Unidade Centro\");",
+                  "            const unidade2 = unidades.find(x => x.nome === \"Unidade Norte\");",
+                  "            const tapioca = produtos.find(x => x.nome === \"Tapioca de queijo\");",
+                  "            const baiao = produtos.find(x => x.nome === \"Baião de dois\");",
+                  "            const bolo = produtos.find(x => x.nome === \"Bolo de milho\");",
+                  "            const pingado = produtos.find(x => x.nome === \"Pingado\");",
+                  "            const cuscuz = produtos.find(x => x.nome === \"Cuscuz nordestino\");",
+                  "",
+                  "            if (![cliente, unidade, unidade2, tapioca, baiao, bolo, pingado, cuscuz].every(Boolean)) {",
+                  "                console.error(\"Seed incompleto: não foi possível localizar todos os registros esperados.\");",
+                  "                return;",
+                  "            }",
+                  "",
+                  "            const cv = pm.collectionVariables;",
+                  "            cv.set(\"cliente_id\", cliente.id);",
+                  "            cv.set(\"unidade_id\", unidade.id);",
+                  "            cv.set(\"unidade_secundaria_id\", unidade2.id);",
+                  "            cv.set(\"produto_pedido_a_id\", tapioca.id);",
+                  "            cv.set(\"produto_pedido_b_id\", baiao.id);",
+                  "            cv.set(\"produto_recusa_a_id\", bolo.id);",
+                  "            cv.set(\"produto_recusa_b_id\", pingado.id);",
+                  "            cv.set(\"produto_estoque_id\", cuscuz.id);",
+                  "            cv.set(\"produto_inexistente_id\", Math.max.apply(null, produtos.map(x => x.id)) + 1);",
+                  "            cv.set(\"cliente_inexistente_id\", Math.max.apply(null, clientes.map(x => x.id)) + 1);",
+                  "            cv.set(\"unidade_inexistente_id\", Math.max.apply(null, unidades.map(x => x.id)) + 1);",
+                  "",
+                  "            buscar(\"/catalogo/estoques?produto_id=\" + cuscuz.id + \"&unidade_id=\" + unidade.id, function(estoque) {",
+                  "                cv.set(\"quantidade_estoque_teste\", Number(estoque.quantidade) + 1);",
+                  "                cv.set(\"catalogo_carregado\", \"true\");",
+                  "                console.log(\"Catálogo carregado. IDs descobertos automaticamente.\");",
+                  "            });",
+                  "        });",
+                  "    });",
+                  "});"
                 ]
               }
             }
@@ -93,7 +164,12 @@
               "script": {
                 "type": "text/javascript",
                 "exec": [
-                  "const resposta = pm.response.json();\r\n\r\npm.test(\"Pedido criado com sucesso\", function () {\r\n    pm.response.to.have.status(201);\r\n});\r\n\r\npm.test(\"Status inicial do pedido é PENDENTE\", function () {\r\n    pm.expect(resposta.status).to.eql(\"PENDENTE\");\r\n});\r\n\r\npm.test(\"Valor total calculado corretamente\", function () {\r\n    pm.expect(resposta.valor_total).to.eql(24);\r\n});\r\n\r\npm.environment.set(\"pedido_id\", resposta.id);"
+                  "const resposta = pm.response.json();",
+                  "pm.test(\"Pedido criado com sucesso\", function () { pm.response.to.have.status(201); });",
+                  "pm.test(\"Status inicial do pedido é PENDENTE\", function () { pm.expect(resposta.status).to.eql(\"PENDENTE\"); });",
+                  "pm.test(\"Valor total calculado corretamente\", function () { pm.expect(Number(resposta.valor_total)).to.be.above(0); });",
+                  "pm.environment.set(\"pedido_id\", resposta.id);",
+                  "pm.environment.set(\"pedido_valor_esperado\", Number(resposta.valor_total));"
                 ]
               }
             }
@@ -103,7 +179,7 @@
             "header": [],
             "body": {
               "mode": "raw",
-              "raw": "{\r\n  \"cliente_id\": 1,\r\n  \"unidade_id\": 1,\r\n  \"canal_pedido\": \"APP\",\r\n  \"itens\": [\r\n    {\r\n      \"produto_id\": 2,\r\n      \"quantidade\": 1\r\n    },\r\n    {\r\n      \"produto_id\": 4,\r\n      \"quantidade\": 2\r\n    }\r\n  ]\r\n}",
+              "raw": "{\n  \"cliente_id\": \"{{cliente_id}}\",\n  \"unidade_id\": \"{{unidade_id}}\",\n  \"canal_pedido\": \"APP\",\n  \"itens\": [\n    {\n      \"produto_id\": \"{{produto_pedido_a_id}}\",\n      \"quantidade\": 1\n    },\n    {\n      \"produto_id\": \"{{produto_pedido_b_id}}\",\n      \"quantidade\": 2\n    }\n  ]\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -131,7 +207,11 @@
               "script": {
                 "type": "text/javascript",
                 "exec": [
-                  "const resposta = pm.response.json();\r\n\r\npm.test(\"Pagamento processado com sucesso\", function () {\r\n    pm.response.to.have.status(200);\r\n});\r\n\r\npm.test(\"Pagamento aprovado\", function () {\r\n    pm.expect(resposta.status_pagamento).to.eql(\"APROVADO\");\r\n});\r\n\r\npm.test(\"Pedido atualizado para PAGO\", function () {\r\n    pm.expect(resposta.status_pedido).to.eql(\"PAGO\");\r\n});\r\n\r\npm.test(\"Valor do pagamento correto\", function () {\r\n    pm.expect(resposta.valor).to.eql(24);\r\n});"
+                  "const resposta = pm.response.json();",
+                  "pm.test(\"Pagamento processado com sucesso\", function () { pm.response.to.have.status(200); });",
+                  "pm.test(\"Pagamento aprovado\", function () { pm.expect(resposta.status_pagamento).to.eql(\"APROVADO\"); });",
+                  "pm.test(\"Pedido atualizado para PAGO\", function () { pm.expect(resposta.status_pedido).to.eql(\"PAGO\"); });",
+                  "pm.test(\"Valor do pagamento correto\", function () { pm.expect(Number(resposta.valor)).to.eql(Number(pm.environment.get(\"pedido_valor_esperado\"))); });"
                 ]
               }
             }
@@ -141,7 +221,7 @@
             "header": [],
             "body": {
               "mode": "raw",
-              "raw": "{\r\n  \"aprovado\": true\r\n}",
+              "raw": "{\n  \"aprovado\": true\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -170,7 +250,12 @@
               "script": {
                 "type": "text/javascript",
                 "exec": [
-                  "const resposta = pm.response.json();\r\n\r\npm.test(\"Pedido para teste de recusa criado\", function () {\r\n    pm.response.to.have.status(201);\r\n});\r\n\r\npm.test(\"Pedido iniciado como PENDENTE\", function () {\r\n    pm.expect(resposta.status).to.eql(\"PENDENTE\");\r\n});\r\n\r\npm.test(\"Valor total de R$ 16,00\", function () {\r\n    pm.expect(resposta.valor_total).to.eql(16);\r\n});\r\n\r\npm.environment.set(\"pedido_recusado_id\", resposta.id);"
+                  "const resposta = pm.response.json();",
+                  "pm.test(\"Pedido para teste de recusa criado\", function () { pm.response.to.have.status(201); });",
+                  "pm.test(\"Pedido iniciado como PENDENTE\", function () { pm.expect(resposta.status).to.eql(\"PENDENTE\"); });",
+                  "pm.test(\"Valor total do pedido foi calculado\", function () { pm.expect(Number(resposta.valor_total)).to.be.above(0); });",
+                  "pm.environment.set(\"pedido_recusado_id\", resposta.id);",
+                  "pm.environment.set(\"pedido_recusado_valor_esperado\", Number(resposta.valor_total));"
                 ]
               }
             }
@@ -180,7 +265,7 @@
             "header": [],
             "body": {
               "mode": "raw",
-              "raw": "{\r\n  \"cliente_id\": 1,\r\n  \"unidade_id\": 1,\r\n  \"canal_pedido\": \"BALCAO\",\r\n  \"itens\": [\r\n    {\r\n      \"produto_id\": 3,\r\n      \"quantidade\": 1\r\n    },\r\n    {\r\n      \"produto_id\": 9,\r\n      \"quantidade\": 1\r\n    }\r\n  ]\r\n}",
+              "raw": "{\n  \"cliente_id\": \"{{cliente_id}}\",\n  \"unidade_id\": \"{{unidade_id}}\",\n  \"canal_pedido\": \"BALCAO\",\n  \"itens\": [\n    {\n      \"produto_id\": \"{{produto_recusa_a_id}}\",\n      \"quantidade\": 1\n    },\n    {\n      \"produto_id\": \"{{produto_recusa_b_id}}\",\n      \"quantidade\": 1\n    }\n  ]\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -208,7 +293,11 @@
               "script": {
                 "type": "text/javascript",
                 "exec": [
-                  "const resposta = pm.response.json();\r\n\r\npm.test(\"Pagamento processado com sucesso\", function () {\r\n    pm.response.to.have.status(200);\r\n});\r\n\r\npm.test(\"Pagamento foi recusado\", function () {\r\n    pm.expect(resposta.status_pagamento).to.eql(\"RECUSADO\");\r\n});\r\n\r\npm.test(\"Pedido atualizado para PAGAMENTO_RECUSADO\", function () {\r\n    pm.expect(resposta.status_pedido).to.eql(\"PAGAMENTO_RECUSADO\");\r\n});\r\n\r\npm.test(\"Valor do pagamento correto\", function () {\r\n    pm.expect(resposta.valor).to.eql(16);\r\n});"
+                  "const resposta = pm.response.json();",
+                  "pm.test(\"Pagamento processado com sucesso\", function () { pm.response.to.have.status(200); });",
+                  "pm.test(\"Pagamento foi recusado\", function () { pm.expect(resposta.status_pagamento).to.eql(\"RECUSADO\"); });",
+                  "pm.test(\"Pedido atualizado para PAGAMENTO_RECUSADO\", function () { pm.expect(resposta.status_pedido).to.eql(\"PAGAMENTO_RECUSADO\"); });",
+                  "pm.test(\"Valor do pagamento correto\", function () { pm.expect(Number(resposta.valor)).to.eql(Number(pm.environment.get(\"pedido_recusado_valor_esperado\"))); });"
                 ]
               }
             }
@@ -218,7 +307,7 @@
             "header": [],
             "body": {
               "mode": "raw",
-              "raw": "{\r\n  \"aprovado\": false\r\n}",
+              "raw": "{\n  \"aprovado\": false\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -247,7 +336,25 @@
               "script": {
                 "type": "text/javascript",
                 "exec": [
-                  "const resposta = pm.response.json();\r\n\r\npm.test(\"Listagem realizada com sucesso\", function () {\r\n    pm.response.to.have.status(200);\r\n});\r\n\r\npm.test(\"Resposta é uma lista de pedidos\", function () {\r\n    pm.expect(resposta).to.be.an(\"array\");\r\n});\r\n\r\npm.test(\"Lista contém pedidos cadastrados\", function () {\r\n    pm.expect(resposta.length).to.be.above(0);\r\n});\r\n\r\npm.test(\"Pedidos possuem os campos principais\", function () {\r\n    pm.expect(resposta[0]).to.have.property(\"id\");\r\n    pm.expect(resposta[0]).to.have.property(\"status\");\r\n    pm.expect(resposta[0]).to.have.property(\"valor_total\");\r\n});"
+                  "const resposta = pm.response.json();\r",
+                  "\r",
+                  "pm.test(\"Listagem realizada com sucesso\", function () {\r",
+                  "    pm.response.to.have.status(200);\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Resposta é uma lista de pedidos\", function () {\r",
+                  "    pm.expect(resposta).to.be.an(\"array\");\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Lista contém pedidos cadastrados\", function () {\r",
+                  "    pm.expect(resposta.length).to.be.above(0);\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Pedidos possuem os campos principais\", function () {\r",
+                  "    pm.expect(resposta[0]).to.have.property(\"id\");\r",
+                  "    pm.expect(resposta[0]).to.have.property(\"status\");\r",
+                  "    pm.expect(resposta[0]).to.have.property(\"valor_total\");\r",
+                  "});"
                 ]
               }
             }
@@ -276,7 +383,19 @@
               "script": {
                 "type": "text/javascript",
                 "exec": [
-                  "pm.test(\"Status HTTP 200\", function () {\r\n    pm.response.to.have.status(200);\r\n});\r\n\r\npm.test(\"Todos os pedidos pertencem ao canal APP\", function () {\r\n    const pedidos = pm.response.json();\r\n\r\n    pm.expect(pedidos).to.be.an(\"array\");\r\n\r\n    pedidos.forEach(function (pedido) {\r\n        pm.expect(pedido.canal_pedido).to.eql(\"APP\");\r\n    });\r\n});"
+                  "pm.test(\"Status HTTP 200\", function () {\r",
+                  "    pm.response.to.have.status(200);\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Todos os pedidos pertencem ao canal APP\", function () {\r",
+                  "    const pedidos = pm.response.json();\r",
+                  "\r",
+                  "    pm.expect(pedidos).to.be.an(\"array\");\r",
+                  "\r",
+                  "    pedidos.forEach(function (pedido) {\r",
+                  "        pm.expect(pedido.canal_pedido).to.eql(\"APP\");\r",
+                  "    });\r",
+                  "});"
                 ]
               }
             }
@@ -311,7 +430,29 @@
               "script": {
                 "type": "text/javascript",
                 "exec": [
-                  "const resposta = pm.response.json();\r\n\r\npm.test(\"Retorna HTTP 422\", function () {\r\n    pm.response.to.have.status(422);\r\n});\r\n\r\npm.test(\"Mensagem de validação é retornada\", function () {\r\n    pm.expect(resposta.erro.mensagem)\r\n        .to.eql(\"Os dados enviados são inválidos\");\r\n});\r\n\r\npm.test(\"Identifica cliente_id como campo obrigatório\", function () {\r\n    const detalhes = resposta.erro.detalhes;\r\n\r\n    pm.expect(detalhes).to.be.an(\"array\");\r\n\r\n    pm.expect(\r\n        detalhes.some(item =>\r\n            item.loc.includes(\"cliente_id\") &&\r\n            item.type === \"missing\"\r\n        )\r\n    ).to.eql(true);\r\n});"
+                  "const resposta = pm.response.json();\r",
+                  "\r",
+                  "pm.test(\"Retorna HTTP 422\", function () {\r",
+                  "    pm.response.to.have.status(422);\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Mensagem de validação é retornada\", function () {\r",
+                  "    pm.expect(resposta.erro.mensagem)\r",
+                  "        .to.eql(\"Os dados enviados são inválidos\");\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Identifica cliente_id como campo obrigatório\", function () {\r",
+                  "    const detalhes = resposta.erro.detalhes;\r",
+                  "\r",
+                  "    pm.expect(detalhes).to.be.an(\"array\");\r",
+                  "\r",
+                  "    pm.expect(\r",
+                  "        detalhes.some(item =>\r",
+                  "            item.loc.includes(\"cliente_id\") &&\r",
+                  "            item.type === \"missing\"\r",
+                  "        )\r",
+                  "    ).to.eql(true);\r",
+                  "});"
                 ]
               }
             }
@@ -321,7 +462,7 @@
             "header": [],
             "body": {
               "mode": "raw",
-              "raw": "{\r\n  \"unidade_id\": 1,\r\n  \"canal_pedido\": \"APP\",\r\n  \"itens\": [\r\n    {\r\n      \"produto_id\": 2,\r\n      \"quantidade\": 1\r\n    },\r\n    {\r\n      \"produto_id\": 4,\r\n      \"quantidade\": 2\r\n    }\r\n  ]\r\n}",
+              "raw": "{\n  \"unidade_id\": \"{{unidade_id}}\",\n  \"canal_pedido\": \"APP\",\n  \"itens\": [\n    {\n      \"produto_id\": \"{{produto_pedido_a_id}}\",\n      \"quantidade\": 1\n    },\n    {\n      \"produto_id\": \"{{produto_pedido_b_id}}\",\n      \"quantidade\": 2\n    }\n  ]\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -349,7 +490,20 @@
               "script": {
                 "type": "text/javascript",
                 "exec": [
-                  "const resposta = pm.response.json();\r\n\r\npm.test(\"Unidade inexistente deve ser rejeitada\", function () {\r\n    pm.response.to.have.status(404);\r\n});\r\n\r\npm.test(\"Erro possui formato padronizado\", function () {\r\n    pm.expect(resposta).to.have.property(\"erro\");\r\n    pm.expect(resposta.erro.codigo).to.eql(404);\r\n});\r\n\r\npm.test(\"Mensagem identifica a unidade não encontrada\", function () {\r\n    pm.expect(resposta.erro.mensagem).to.include(\"Unidade\");\r\n});"
+                  "const resposta = pm.response.json();\r",
+                  "\r",
+                  "pm.test(\"Unidade inexistente deve ser rejeitada\", function () {\r",
+                  "    pm.response.to.have.status(404);\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Erro possui formato padronizado\", function () {\r",
+                  "    pm.expect(resposta).to.have.property(\"erro\");\r",
+                  "    pm.expect(resposta.erro.codigo).to.eql(404);\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Mensagem identifica a unidade não encontrada\", function () {\r",
+                  "    pm.expect(resposta.erro.mensagem).to.include(\"Unidade\");\r",
+                  "});"
                 ]
               }
             }
@@ -359,7 +513,7 @@
             "header": [],
             "body": {
               "mode": "raw",
-              "raw": "{\r\n  \"cliente_id\": 1,\r\n  \"unidade_id\": 99999,\r\n  \"canal_pedido\": \"APP\",\r\n  \"itens\": [\r\n    {\r\n      \"produto_id\": 2,\r\n      \"quantidade\": 1\r\n    }\r\n  ]\r\n}",
+              "raw": "{\n  \"cliente_id\": \"{{cliente_id}}\",\n  \"unidade_id\": \"{{unidade_inexistente_id}}\",\n  \"canal_pedido\": \"APP\",\n  \"itens\": [\n    {\n      \"produto_id\": \"{{produto_pedido_a_id}}\",\n      \"quantidade\": 1\n    }\n  ]\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -387,7 +541,20 @@
               "script": {
                 "type": "text/javascript",
                 "exec": [
-                  "const resposta = pm.response.json();\r\n\r\npm.test(\"Cliente inexistente deve ser rejeitado\", function () {\r\n    pm.response.to.have.status(404);\r\n});\r\n\r\npm.test(\"Erro possui formato padronizado\", function () {\r\n    pm.expect(resposta).to.have.property(\"erro\");\r\n    pm.expect(resposta.erro.codigo).to.eql(404);\r\n});\r\n\r\npm.test(\"Mensagem identifica o cliente não encontrado\", function () {\r\n    pm.expect(resposta.erro.mensagem).to.include(\"Cliente\");\r\n});"
+                  "const resposta = pm.response.json();\r",
+                  "\r",
+                  "pm.test(\"Cliente inexistente deve ser rejeitado\", function () {\r",
+                  "    pm.response.to.have.status(404);\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Erro possui formato padronizado\", function () {\r",
+                  "    pm.expect(resposta).to.have.property(\"erro\");\r",
+                  "    pm.expect(resposta.erro.codigo).to.eql(404);\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Mensagem identifica o cliente não encontrado\", function () {\r",
+                  "    pm.expect(resposta.erro.mensagem).to.include(\"Cliente\");\r",
+                  "});"
                 ]
               }
             }
@@ -397,7 +564,7 @@
             "header": [],
             "body": {
               "mode": "raw",
-              "raw": "{\r\n  \"cliente_id\": 9999,\r\n  \"unidade_id\": 1,\r\n  \"canal_pedido\": \"APP\",\r\n  \"itens\": [\r\n    {\r\n      \"produto_id\": 2,\r\n      \"quantidade\": 1\r\n    },\r\n    {\r\n      \"produto_id\": 4,\r\n      \"quantidade\": 2\r\n    }\r\n  ]\r\n}",
+              "raw": "{\n  \"cliente_id\": \"{{cliente_inexistente_id}}\",\n  \"unidade_id\": \"{{unidade_id}}\",\n  \"canal_pedido\": \"APP\",\n  \"itens\": [\n    {\n      \"produto_id\": \"{{produto_pedido_a_id}}\",\n      \"quantidade\": 1\n    },\n    {\n      \"produto_id\": \"{{produto_pedido_b_id}}\",\n      \"quantidade\": 2\n    }\n  ]\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -425,7 +592,20 @@
               "script": {
                 "type": "text/javascript",
                 "exec": [
-                  "const resposta = pm.response.json();\r\n\r\npm.test(\"Produto inexistente deve ser rejeitado\", function () {\r\n    pm.response.to.have.status(404);\r\n});\r\n\r\npm.test(\"Erro possui formato padronizado\", function () {\r\n    pm.expect(resposta).to.have.property(\"erro\");\r\n    pm.expect(resposta.erro.codigo).to.eql(404);\r\n});\r\n\r\npm.test(\"Mensagem identifica o produto não encontrado\", function () {\r\n    pm.expect(resposta.erro.mensagem).to.include(\"Produto\");\r\n});"
+                  "const resposta = pm.response.json();\r",
+                  "\r",
+                  "pm.test(\"Produto inexistente deve ser rejeitado\", function () {\r",
+                  "    pm.response.to.have.status(404);\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Erro possui formato padronizado\", function () {\r",
+                  "    pm.expect(resposta).to.have.property(\"erro\");\r",
+                  "    pm.expect(resposta.erro.codigo).to.eql(404);\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Mensagem identifica o produto não encontrado\", function () {\r",
+                  "    pm.expect(resposta.erro.mensagem).to.include(\"Produto\");\r",
+                  "});"
                 ]
               }
             }
@@ -435,7 +615,7 @@
             "header": [],
             "body": {
               "mode": "raw",
-              "raw": "{\r\n  \"cliente_id\": 1,\r\n  \"unidade_id\": 1,\r\n  \"canal_pedido\": \"APP\",\r\n  \"itens\": [\r\n    {\r\n      \"produto_id\": 99999,\r\n      \"quantidade\": 1\r\n    },\r\n    {\r\n      \"produto_id\": 4,\r\n      \"quantidade\": 2\r\n    }\r\n  ]\r\n}",
+              "raw": "{\n  \"cliente_id\": \"{{cliente_id}}\",\n  \"unidade_id\": \"{{unidade_id}}\",\n  \"canal_pedido\": \"APP\",\n  \"itens\": [\n    {\n      \"produto_id\": \"{{produto_inexistente_id}}\",\n      \"quantidade\": 1\n    }\n  ]\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -463,7 +643,20 @@
               "script": {
                 "type": "text/javascript",
                 "exec": [
-                  "const resposta = pm.response.json();\r\n\r\npm.test(\"Quantidade negativa deve ser rejeitada\", function () {\r\n    pm.response.to.have.status(422);\r\n});\r\n\r\npm.test(\"Erro possui formato padronizado\", function () {\r\n    pm.expect(resposta).to.have.property(\"erro\");\r\n    pm.expect(resposta.erro.codigo).to.eql(422);\r\n});\r\n\r\npm.test(\"Erro identifica dados inválidos\", function () {\r\n    pm.expect(resposta.erro.mensagem).to.include(\"inválidos\");\r\n});"
+                  "const resposta = pm.response.json();\r",
+                  "\r",
+                  "pm.test(\"Quantidade negativa deve ser rejeitada\", function () {\r",
+                  "    pm.response.to.have.status(422);\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Erro possui formato padronizado\", function () {\r",
+                  "    pm.expect(resposta).to.have.property(\"erro\");\r",
+                  "    pm.expect(resposta.erro.codigo).to.eql(422);\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Erro identifica dados inválidos\", function () {\r",
+                  "    pm.expect(resposta.erro.mensagem).to.include(\"inválidos\");\r",
+                  "});"
                 ]
               }
             }
@@ -473,7 +666,7 @@
             "header": [],
             "body": {
               "mode": "raw",
-              "raw": "{\r\n  \"cliente_id\": 1,\r\n  \"unidade_id\": 1,\r\n  \"canal_pedido\": \"APP\",\r\n  \"itens\": [\r\n    {\r\n      \"produto_id\": 2,\r\n      \"quantidade\": 1\r\n    },\r\n    {\r\n      \"produto_id\": 4,\r\n      \"quantidade\": -1\r\n    }\r\n  ]\r\n}",
+              "raw": "{\n  \"cliente_id\": \"{{cliente_id}}\",\n  \"unidade_id\": \"{{unidade_id}}\",\n  \"canal_pedido\": \"APP\",\n  \"itens\": [\n    {\n      \"produto_id\": \"{{produto_pedido_a_id}}\",\n      \"quantidade\": -1\n    }\n  ]\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -501,7 +694,17 @@
               "script": {
                 "type": "text/javascript",
                 "exec": [
-                  "const resposta = pm.response.json();\r\n\r\npm.test(\"Acesso sem token deve ser bloqueado\", function () {\r\n    pm.response.to.have.status(401);\r\n});\r\n\r\npm.test(\"API retorna erro no formato padronizado\", function () {\r\n    pm.expect(resposta).to.have.property(\"erro\");\r\n    pm.expect(resposta.erro.codigo).to.eql(401);\r\n    pm.expect(resposta.erro).to.have.property(\"mensagem\");\r\n});"
+                  "const resposta = pm.response.json();\r",
+                  "\r",
+                  "pm.test(\"Acesso sem token deve ser bloqueado\", function () {\r",
+                  "    pm.response.to.have.status(401);\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"API retorna erro no formato padronizado\", function () {\r",
+                  "    pm.expect(resposta).to.have.property(\"erro\");\r",
+                  "    pm.expect(resposta.erro.codigo).to.eql(401);\r",
+                  "    pm.expect(resposta.erro).to.have.property(\"mensagem\");\r",
+                  "});"
                 ]
               }
             }
@@ -533,7 +736,20 @@
               "script": {
                 "type": "text/javascript",
                 "exec": [
-                  "const resposta = pm.response.json();\r\n\r\npm.test(\"Pagamento duplicado deve ser bloqueado\", function () {\r\n    pm.response.to.have.status(409);\r\n});\r\n\r\npm.test(\"API retorna erro padronizado\", function () {\r\n    pm.expect(resposta).to.have.property(\"erro\");\r\n    pm.expect(resposta.erro.codigo).to.eql(409);\r\n});\r\n\r\npm.test(\"Mensagem informa conflito no pedido\", function () {\r\n    pm.expect(resposta.erro.mensagem).to.include(\"pendente\");\r\n});"
+                  "const resposta = pm.response.json();\r",
+                  "\r",
+                  "pm.test(\"Pagamento duplicado deve ser bloqueado\", function () {\r",
+                  "    pm.response.to.have.status(409);\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"API retorna erro padronizado\", function () {\r",
+                  "    pm.expect(resposta).to.have.property(\"erro\");\r",
+                  "    pm.expect(resposta.erro.codigo).to.eql(409);\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Mensagem informa conflito no pedido\", function () {\r",
+                  "    pm.expect(resposta.erro.mensagem).to.include(\"pendente\");\r",
+                  "});"
                 ]
               }
             }
@@ -543,7 +759,7 @@
             "header": [],
             "body": {
               "mode": "raw",
-              "raw": "{\r\n  \"aprovado\": true\r\n}",
+              "raw": "{\n  \"aprovado\": true\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -595,7 +811,7 @@
             "header": [],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"cliente_id\": 1,\n  \"unidade_id\": 1,\n  \"canal_pedido\": \"APP\",\n  \"itens\": [\n    {\n      \"produto_id\": 1,\n      \"quantidade\": 21\n    }\n  ]\n}",
+              "raw": "{\n  \"cliente_id\": \"{{cliente_id}}\",\n  \"unidade_id\": \"{{unidade_id}}\",\n  \"canal_pedido\": \"APP\",\n  \"itens\": [\n    {\n      \"produto_id\": \"{{produto_estoque_id}}\",\n      \"quantidade\": \"{{quantidade_estoque_teste}}\"\n    }\n  ]\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -612,7 +828,7 @@
                 ""
               ]
             },
-            "description": "Pré-condição: executar o seed, que cadastra 20 unidades do produto ID 1 na Unidade Centro. O pedido solicita 21 unidades para provocar insuficiência no pagamento."
+            "description": "Pré-condição: executar o seed. O produto configurado em {{produto_estoque_id}} deve possuir exatamente 20 unidades disponíveis na unidade {{unidade_id}}, pois o teste solicita 21. Se o seed usar outra quantidade, ajuste o corpo da requisição para solicitar quantidade superior ao estoque."
           },
           "response": []
         },
@@ -673,7 +889,19 @@
               "script": {
                 "type": "text/javascript",
                 "exec": [
-                  "pm.test(\"Pedido criado na unidade 2\", function () {\r\n    pm.response.to.have.status(201);\r\n\r\n    const resposta = pm.response.json();\r\n\r\n    pm.expect(resposta.status).to.eql(\"PENDENTE\");\r\n    pm.expect(resposta.unidade_id).to.eql(2);\r\n\r\n    pm.environment.set(\r\n        \"pedido_outra_unidade_id\",\r\n        resposta.id\r\n    );\r\n});"
+                  "pm.test(\"Pedido criado na unidade 2\", function () {\r",
+                  "    pm.response.to.have.status(201);\r",
+                  "\r",
+                  "    const resposta = pm.response.json();\r",
+                  "\r",
+                  "    pm.expect(resposta.status).to.eql(\"PENDENTE\");\r",
+                  "    pm.expect(Number(resposta.unidade_id)).to.eql(Number(pm.collectionVariables.get(\"unidade_secundaria_id\")));\r",
+                  "\r",
+                  "    pm.environment.set(\r",
+                  "        \"pedido_outra_unidade_id\",\r",
+                  "        resposta.id\r",
+                  "    );\r",
+                  "});"
                 ]
               }
             }
@@ -683,7 +911,7 @@
             "header": [],
             "body": {
               "mode": "raw",
-              "raw": "{\r\n    \"cliente_id\": 1,\r\n    \"unidade_id\": 2,\r\n    \"canal_pedido\": \"APP\",\r\n    \"itens\": [\r\n        {\r\n            \"produto_id\": 1,\r\n            \"quantidade\": 1\r\n        }\r\n    ]\r\n}",
+              "raw": "{\n  \"cliente_id\": \"{{cliente_id}}\",\n  \"unidade_id\": \"{{unidade_secundaria_id}}\",\n  \"canal_pedido\": \"APP\",\n  \"itens\": [\n    {\n      \"produto_id\": \"{{produto_estoque_id}}\",\n      \"quantidade\": 1\n    }\n  ]\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -699,7 +927,8 @@
                 "pedidos",
                 ""
               ]
-            }
+            },
+            "description": "Pré-condição: o seed deve cadastrar a unidade identificada por {{unidade_secundaria_id}} e disponibilizar o produto {{produto_estoque_id}} nela."
           },
           "response": []
         }
@@ -716,7 +945,15 @@
               "script": {
                 "type": "text/javascript",
                 "exec": [
-                  "const resposta = pm.response.json();\r\n\r\npm.test(\"Login realizado com sucesso\", function () {\r\n    pm.response.to.have.status(200);\r\n});\r\n\r\npm.environment.set(\"token\", resposta.access_token);\r\n\r\nconsole.log(\"Token salvo:\", pm.environment.get(\"token\") ? \"SIM\" : \"NÃO\");"
+                  "const resposta = pm.response.json();\r",
+                  "\r",
+                  "pm.test(\"Login realizado com sucesso\", function () {\r",
+                  "    pm.response.to.have.status(200);\r",
+                  "});\r",
+                  "\r",
+                  "pm.environment.set(\"token\", resposta.access_token);\r",
+                  "\r",
+                  "console.log(\"Token salvo:\", pm.environment.get(\"token\") ? \"SIM\" : \"NÃO\");"
                 ]
               }
             }
@@ -729,7 +966,7 @@
             "header": [],
             "body": {
               "mode": "raw",
-              "raw": "{\r\n    \"email\": \"insira o email aqui\",\r\n    \"senha\": \"insira a senha\"\r\n}",
+              "raw": "{\n  \"email\": \"insira o email aqui\",\n  \"senha\": \"insira a senha\"\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -757,7 +994,20 @@
               "script": {
                 "type": "text/javascript",
                 "exec": [
-                  "const resposta = pm.response.json();\r\n\r\npm.test(\"Operador não pode acessar pedido de outra unidade\", function () {\r\n    pm.response.to.have.status(403);\r\n});\r\n\r\npm.test(\"Erro possui formato padronizado\", function () {\r\n    pm.expect(resposta).to.have.property(\"erro\");\r\n    pm.expect(resposta.erro.codigo).to.eql(403);\r\n});\r\n\r\npm.test(\"Acesso negado informado corretamente\", function () {\r\n    pm.expect(resposta.erro.mensagem).to.include(\"permissão\");\r\n});"
+                  "const resposta = pm.response.json();\r",
+                  "\r",
+                  "pm.test(\"Operador não pode acessar pedido de outra unidade\", function () {\r",
+                  "    pm.response.to.have.status(403);\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Erro possui formato padronizado\", function () {\r",
+                  "    pm.expect(resposta).to.have.property(\"erro\");\r",
+                  "    pm.expect(resposta.erro.codigo).to.eql(403);\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Acesso negado informado corretamente\", function () {\r",
+                  "    pm.expect(resposta.erro.mensagem).to.include(\"permissão\");\r",
+                  "});"
                 ]
               }
             }
@@ -767,7 +1017,7 @@
             "header": [],
             "body": {
               "mode": "raw",
-              "raw": "{\r\n  \"aprovado\": true\r\n}",
+              "raw": "{\n  \"aprovado\": true\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -800,5 +1050,55 @@
         "type": "string"
       }
     ]
-  }
+  },
+  "variable": [
+    {
+      "key": "cliente_id",
+      "value": "1",
+      "type": "default",
+      "description": "ID do cliente João Silva criado pelo seed. Padrão 1 apenas em banco vazio."
+    },
+    {
+      "key": "unidade_id",
+      "value": "1",
+      "type": "default",
+      "description": "ID da Unidade Centro criada pelo seed. Padrão 1 apenas em banco vazio."
+    },
+    {
+      "key": "unidade_secundaria_id",
+      "value": "2",
+      "type": "default",
+      "description": "ID da Unidade Norte criada pelo seed. Padrão 2 apenas em banco vazio."
+    },
+    {
+      "key": "produto_estoque_id",
+      "value": "1",
+      "type": "default",
+      "description": "ID do Cuscuz nordestino. Estoque inicial de 20 unidades por unidade."
+    },
+    {
+      "key": "produto_pedido_a_id",
+      "value": "2",
+      "type": "default",
+      "description": "ID da Tapioca de queijo."
+    },
+    {
+      "key": "produto_pedido_b_id",
+      "value": "4",
+      "type": "default",
+      "description": "ID do Baião de dois."
+    },
+    {
+      "key": "produto_recusa_a_id",
+      "value": "3",
+      "type": "default",
+      "description": "ID do Bolo de milho."
+    },
+    {
+      "key": "produto_recusa_b_id",
+      "value": "8",
+      "type": "default",
+      "description": "ID do Pingado. O seed cadastra 8 produtos, não existe produto 9."
+    }
+  ]
 }
