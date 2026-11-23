@@ -30,6 +30,7 @@ A API contempla as seguintes funcionalidades:
 - Controle de estoque por produto e unidade.
 - Baixa automática do estoque após pagamento aprovado.
 - Bloqueio do processamento do pagamento quando o estoque é insuficiente.
+- Consulta de clientes, unidades, produtos e estoques por meio do módulo de catálogo.
 
 ### 2.2. Fluxo principal implementado
 
@@ -347,6 +348,10 @@ A API disponibiliza os seguintes endpoints principais:
 | GET | `/pedidos/` | Lista os pedidos conforme as permissões do usuário | Sim |
 | POST | `/pedidos/` | Cria um novo pedido. Canal obrigatório | Sim |
 | POST | `/pedidos/{pedido_id}/pagamento` | Processa o pagamento simulado e atualiza o status do pedido | Sim |
+| GET | `/catalogo/clientes` | Lista os clientes cadastrados | Sim |
+| GET | `/catalogo/unidades` | Lista as unidades cadastradas | Sim |
+| GET | `/catalogo/produtos` | Lista os produtos e seus preços | Sim |
+| GET | `/catalogo/estoques` | Consulta o estoque por produto e unidade | Sim |
 
 O endpoint GET /pedidos/ permite filtrar os pedidos pelo parâmetro canal_pedido, aceitando os seguintes valores:
 
