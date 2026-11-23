@@ -232,6 +232,10 @@ No PostgreSQL, crie um banco de dados com o seguinte nome:
 
 `raizes_nordeste`
 
+`CREATE DATABASE raizes_nordeste;`
+
+O comando acima pode ser executado pelo Query Tool do pgAdmin ou por outro cliente de administração do PostgreSQL. Após a execução, confirme que o banco foi criado antes de prosseguir.
+
 ### 7.2. Configurar as variáveis de ambiente
 
 Na raiz do projeto, crie um arquivo chamado `.env`, utilizando o arquivo `.env.example` como referência.
@@ -256,6 +260,15 @@ Algumas informações importantes:
 - `DB_USER`: usuário utilizado para acessar o PostgreSQL.
 - `DB_PASSWORD`: senha do usuário do banco.
 - `SECRET_KEY`: chave utilizada na geração e validação dos tokens JWT.
+
+
+Para gerar uma chave secreta segura para utilização no JWT, execute o comando abaixo no terminal:
+
+```powershell
+python -c "import secrets; print(secrets.token_urlsafe(32))"
+```
+
+Copie o valor gerado e utilize-o no campo `SECRET_KEY` do arquivo `.env`.
 
 Substitua os valores de exemplo pelas configurações do seu ambiente.
 
